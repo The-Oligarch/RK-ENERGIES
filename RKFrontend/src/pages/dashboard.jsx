@@ -343,31 +343,7 @@ const Dashboard = () => {
                                 </nav>
                             </div>
                             
-                            <div class="drawer-menu-divider"></div>
                             
-                            <div class="drawer-menu-heading">Plugins</div>
-                            
-                            <a class="nav-link" href="plugins-charts.html">
-                                <div class="nav-link-icon"><i class="material-icons">bar_chart</i></div>
-                                Charts
-                            </a>
-                            
-                            <a class="nav-link" href="plugins-code-blocks.html">
-                                <div class="nav-link-icon"><i class="material-icons">code</i></div>
-                                Code Blocks
-                            </a>
-                           
-                            <a class="nav-link" href="plugins-data-tables.html">
-                                <div class="nav-link-icon"><i class="material-icons">filter_alt</i></div>
-                                Data Tables
-                            </a>
-                            
-                            <a class="nav-link" href="plugins-date-picker.html">
-                                <div class="nav-link-icon"><i class="material-icons">date_range</i></div>
-                                Date Picker
-                            </a>
-                        
-                    
                         </nav>
                         <div class="drawer-footer border-top">
                         <div class="d-flex align-items-center">
@@ -576,45 +552,12 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                        <div class="row gx-5">
-                            
-                            <div class="col-xl-6 mb-5">
-                                <div class="card card-raised h-100">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between">
-                                            <div class="me-4">
-                                                <h2 class="card-title mb-0">Privacy Suggestions</h2>
-                                                <p class="card-text">Take our privacy checkup to choose which settings are right for you.</p>
-                                            </div>
-                                            <img src="assets/img/illustrations/security.svg" alt="..." style={{ height: '6rem' }} />
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-transparent position-relative ripple-gray px-4"><a class="stretched-link text-decoration-none" href="#!">Review suggestions (4)</a></div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-xl-6 mb-5">
-                                <div class="card card-raised h-100">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between">
-                                            <div class="me-4">
-                                                <h2 class="card-title mb-0">Account Storage</h2>
-                                                <p class="card-text">Your account storage is shared across all devices.</p>
-                                                <div class="progress mb-2" style={{ height: '0.25rem' }}><div class="progress-bar" role="progressbar" style={{width: '33%' }} aria-valuenow="10" aria-valuemin="0" aria-valuemax="30"></div></div>
-                                                <div class="card-text">10 GB of 30 GB used</div>
-                                            </div>
-                                            <img src="assets/img/illustrations/cloud.svg" alt="..." style={{ height: '6rem' }} />
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-transparent position-relative ripple-gray px-4"><a class="stretched-link text-decoration-none" href="#!">Manage storage</a></div>
-                                </div>
-                            </div>
-                        </div>
+                       
                         <div class="card card-raised">
                             <div class="card-header bg-primary text-white px-4">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="me-4">
-                                        <h2 class="card-title text-white mb-0">Orders</h2>
+                                        <h2 class="card-title text-white mb-0">Sales</h2>
                                         <div class="card-subtitle">Details and history</div>
                                     </div>
                                     <div class="d-flex gap-2">
