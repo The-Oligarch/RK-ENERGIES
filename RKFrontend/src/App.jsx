@@ -16,15 +16,15 @@ function App() {
   return (
     <Router>
       <Routes>
-      <Route path="/" element={<Dashboard />} />
+      <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
-
-      {/* Protect these routes */}
+      <Route path="/dashboard" element={<Dashboard />} />
+      {/* Protect these routes 
       <Route
         path="/dashboard"
         element={<ProtectedRoute element={<Login />} />}
       />
-      
+      */}
     </Routes>
     </Router>
   );

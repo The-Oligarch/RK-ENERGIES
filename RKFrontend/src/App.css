@@ -14630,14 +14630,14 @@ body {
 .bg-pattern-doubs {
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url("../assets/img/patterns/doubs.svg");
+  background-image: url("../src/assets/img/patterns/doubs.svg");
   background-position: center;
 }
 
 .bg-pattern-waihou {
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url("../assets/img/patterns/waihou.svg");
+  background-image: url("../src/assets/img/patterns/waihou.svg");
   background-position: center;
 }
 

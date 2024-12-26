@@ -9,13 +9,14 @@ const Dashboard = () => {
     };
 
     return (
+        
         <div className="layout">
             <nav className="top-app-bar navbar navbar-expand navbar-dark bg-dark">
                 <div className="container-fluid px-4">
 
                     <button className="btn btn-lg btn-icon order-1 order-lg-0" id="drawerToggle" onClick={toggleDrawer}><i className="material-icons">menu</i></button>
 
-                    <a className="navbar-brand me-auto" href="index.html"><div className="text-uppercase font-monospace">RK ENERGIES</div></a>
+                    <a className="navbar-brand me-auto" href="/"><div className="text-uppercase font-monospace">RK ENERGIES</div></a>
 
                     <div className="d-flex align-items-center mx-3 me-lg-0">
 
@@ -135,7 +136,7 @@ const Dashboard = () => {
                                     </li>
                                     <li><hr className="dropdown-divider" /></li>
                                     <li>
-                                        <a className="dropdown-item" href="#!">
+                                        <a className="dropdown-item" href="/">
                                             <i className="material-icons leading-icon">logout</i>
                                             <div className="me-3">Logout</div>
                                         </a>
@@ -152,205 +153,205 @@ const Dashboard = () => {
                 {isDrawerOpen && (
                     <div className="drawer">
                         <nav className="drawer-menu">
-                        <div class="drawer-menu-divider d-sm-none"></div>
+                        <div className="drawer-menu-divider d-sm-none"></div>
                             
-                            <div class="drawer-menu-heading">Interface</div>
+                            <div className="drawer-menu-heading">Interface</div>
                             
-                            <a class="nav-link d-flex " href="index.html">
-                                <div class="nav-link-icon  me-4"><i class="material-icons">language</i></div>
+                            <a className="nav-link d-flex " href="index.html">
+                                <div className="nav-link-icon  me-4"><i className="material-icons">language</i></div>
                                 Dashboard
                             </a>
                            
-                            <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
-                                <div class="nav-link-icon"><i class="material-icons">dashboard</i></div>
+                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
+                                <div className="nav-link-icon"><i className="material-icons">dashboard</i></div>
                                 Theme
-                                <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                             </a>
                            
-                            <div class="collapse" id="collapseDashboards" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav class="drawer-menu-nested nav">
-                                    <a class="nav-link" href="app-dashboard-default.html">Default</a>
-                                    <a class="nav-link" href="app-dashboard-minimal.html">Minimal</a>
-                                    <a class="nav-link" href="app-dashboard-analytics.html">Analytics</a>
-                                    <a class="nav-link" href="app-dashboard-accounting.html">Accounting</a>
-                                    <a class="nav-link" href="app-dashboard-orders.html">Orders</a>
-                                    <a class="nav-link" href="app-dashboard-projects.html">Projects</a>
+                            <div className="collapse" id="collapseDashboards" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+                                <nav className="drawer-menu-nested nav">
+                                    <a className="nav-link" href="app-dashboard-default.html">Default</a>
+                                    <a className="nav-link" href="app-dashboard-minimal.html">Minimal</a>
+                                    <a className="nav-link" href="app-dashboard-analytics.html">Analytics</a>
+                                    <a className="nav-link" href="app-dashboard-accounting.html">Accounting</a>
+                                    <a className="nav-link" href="app-dashboard-orders.html">Orders</a>
+                                    <a className="nav-link" href="app-dashboard-projects.html">Projects</a>
                                 </nav>
                             </div>
                             
-                            <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="nav-link-icon"><i class="material-icons">view_compact</i></div>
+                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div className="nav-link-icon"><i className="material-icons">view_compact</i></div>
                                 Layouts
-                                <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                             </a>
                            
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav class="drawer-menu-nested nav">
-                                    <a class="nav-link" href="layout-dark.html">Dark Theme</a>
-                                    <a class="nav-link" href="layout-light.html">Light Theme</a>
-                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
+                            <div className="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+                                <nav className="drawer-menu-nested nav">
+                                    <a className="nav-link" href="layout-dark.html">Dark Theme</a>
+                                    <a className="nav-link" href="layout-light.html">Light Theme</a>
+                                    <a className="nav-link" href="layout-static.html">Static Navigation</a>
                                 </nav>
                             </div>
                             
-                            <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="nav-link-icon"><i class="material-icons">layers</i></div>
+                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div className="nav-link-icon"><i className="material-icons">layers</i></div>
                                 Pages
-                                <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                             </a>
                             
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#drawerAccordion">
-                                <nav class="drawer-menu-nested nav accordion" id="drawerAccordionPages">
+                            <div className="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#drawerAccordion">
+                                <nav className="drawer-menu-nested nav accordion" id="drawerAccordionPages">
                                    
-                                    <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAccount" aria-expanded="false" aria-controls="pagesCollapseAccount">
+                                    <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAccount" aria-expanded="false" aria-controls="pagesCollapseAccount">
                                         Account
-                                        <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                        <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                                     </a>
                                    
-                                    <div class="collapse" id="pagesCollapseAccount" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
-                                        <nav class="drawer-menu-nested nav">
-                                            <a class="nav-link" href="app-account-billing.html">Billing</a>
-                                            <a class="nav-link" href="app-account-notifications.html">Notifications</a>
-                                            <a class="nav-link" href="app-account-profile.html">Profile</a>
-                                            <a class="nav-link" href="app-account-security.html">Security</a>
+                                    <div className="collapse" id="pagesCollapseAccount" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
+                                        <nav className="drawer-menu-nested nav">
+                                            <a className="nav-link" href="app-account-billing.html">Billing</a>
+                                            <a className="nav-link" href="app-account-notifications.html">Notifications</a>
+                                            <a className="nav-link" href="app-account-profile.html">Profile</a>
+                                            <a className="nav-link" href="app-account-security.html">Security</a>
                                         </nav>
                                     </div>
                                     
-                                    <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                    <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
                                         Authentication
-                                        <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                        <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                                     </a>
                                   
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
-                                        <nav class="drawer-menu-nested nav">
-                                            <a class="nav-link" href="app-auth-login-basic.html">Login 1</a>
-                                            <a class="nav-link" href="app-auth-login-styled-1.html">Login 2</a>
-                                            <a class="nav-link" href="app-auth-login-styled-2.html">Login 3</a>
-                                            <a class="nav-link" href="app-auth-register-basic.html">Register</a>
-                                            <a class="nav-link" href="app-auth-password-basic.html">Forgot Password</a>
+                                    <div className="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
+                                        <nav className="drawer-menu-nested nav">
+                                            <a className="nav-link" href="app-auth-login-basic.html">Login 1</a>
+                                            <a className="nav-link" href="app-auth-login-styled-1.html">Login 2</a>
+                                            <a className="nav-link" href="app-auth-login-styled-2.html">Login 3</a>
+                                            <a className="nav-link" href="app-auth-register-basic.html">Register</a>
+                                            <a className="nav-link" href="app-auth-password-basic.html">Forgot Password</a>
                                         </nav>
                                     </div>
                                     
-                                    <a class="nav-link" href="app-blank-page.html">Blank Page</a>
+                                    <a className="nav-link" href="app-blank-page.html">Blank Page</a>
                                    
-                                    <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                    <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
                                         Error
-                                        <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                        <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                                     </a>
                                     
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
-                                        <nav class="drawer-menu-nested nav">
-                                            <a class="nav-link" href="app-error-400.html">400 Error Page</a>
-                                            <a class="nav-link" href="app-error-401.html">401 Error Page</a>
-                                            <a class="nav-link" href="app-error-403.html">403 Error Page</a>
-                                            <a class="nav-link" href="app-error-404.html">404 Error Page</a>
-                                            <a class="nav-link" href="app-error-429.html">429 Error Page</a>
-                                            <a class="nav-link" href="app-error-500.html">500 Error Page</a>
-                                            <a class="nav-link" href="app-error-503.html">503 Error Page</a>
-                                            <a class="nav-link" href="app-error-504.html">504 Error Page</a>
+                                    <div className="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
+                                        <nav className="drawer-menu-nested nav">
+                                            <a className="nav-link" href="app-error-400.html">400 Error Page</a>
+                                            <a className="nav-link" href="app-error-401.html">401 Error Page</a>
+                                            <a className="nav-link" href="app-error-403.html">403 Error Page</a>
+                                            <a className="nav-link" href="app-error-404.html">404 Error Page</a>
+                                            <a className="nav-link" href="app-error-429.html">429 Error Page</a>
+                                            <a className="nav-link" href="app-error-500.html">500 Error Page</a>
+                                            <a className="nav-link" href="app-error-503.html">503 Error Page</a>
+                                            <a className="nav-link" href="app-error-504.html">504 Error Page</a>
                                         </nav>
                                     </div>
                                     
-                                    <a class="nav-link" href="app-invoice.html">Invoice</a>
+                                    <a className="nav-link" href="app-invoice.html">Invoice</a>
                                     
-                                    <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseKnowledgebase" aria-expanded="false" aria-controls="pagesCollapseKnowledgebase">
+                                    <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseKnowledgebase" aria-expanded="false" aria-controls="pagesCollapseKnowledgebase">
                                         Knowledgebase
-                                        <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                        <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                                     </a>
                                     
-                                    <div class="collapse" id="pagesCollapseKnowledgebase" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
-                                        <nav class="drawer-menu-nested nav">
-                                            <a class="nav-link" href="app-knowledgebase-home.html">Home</a>
-                                            <a class="nav-link" href="app-knowledgebase-categories.html">Categories</a>
-                                            <a class="nav-link" href="app-knowledgebase-article.html">Article</a>
+                                    <div className="collapse" id="pagesCollapseKnowledgebase" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
+                                        <nav className="drawer-menu-nested nav">
+                                            <a className="nav-link" href="app-knowledgebase-home.html">Home</a>
+                                            <a className="nav-link" href="app-knowledgebase-categories.html">Categories</a>
+                                            <a className="nav-link" href="app-knowledgebase-article.html">Article</a>
                                         </nav>
                                     </div>
                                     
-                                    <a class="nav-link" href="app-pricing.html">Pricing</a>
+                                    <a className="nav-link" href="app-pricing.html">Pricing</a>
                                 </nav>
                             </div>
                             
-                            <div class="drawer-menu-divider"></div>
+                            <div className="drawer-menu-divider"></div>
                             
-                            <div class="drawer-menu-heading">UI Toolkit</div>
+                            <div className="drawer-menu-heading">UI Toolkit</div>
                           
-                            <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
-                                <div class="nav-link-icon"><i class="material-icons">widgets</i></div>
+                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
+                                <div className="nav-link-icon"><i className="material-icons">widgets</i></div>
                                 Components
-                                <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                             </a>
                             
-                            <div class="collapse" id="collapseComponents" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav class="drawer-menu-nested nav">
-                                    <a class="nav-link" href="components-alerts.html">Alerts</a>
-                                    <a class="nav-link" href="components-badges.html">Badges</a>
-                                    <a class="nav-link" href="components-buttons.html">Buttons</a>
-                                    <a class="nav-link" href="components-cards.html">Cards</a>
-                                    <a class="nav-link" href="components-chips.html">Chips</a>
-                                    <a class="nav-link" href="components-dropdowns.html">Dropdowns</a>
-                                    <a class="nav-link" href="components-icon-buttons.html">Icon Buttons</a>
-                                    <a class="nav-link" href="components-modals.html">Modals</a>
-                                    <a class="nav-link" href="components-navigation.html">Navigation</a>
-                                    <a class="nav-link" href="components-progress.html">Progress</a>
-                                    <a class="nav-link" href="components-spinners.html">Spinners</a>
-                                    <a class="nav-link" href="components-tooltips.html">Tooltips</a>
+                            <div className="collapse" id="collapseComponents" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+                                <nav className="drawer-menu-nested nav">
+                                    <a className="nav-link" href="components-alerts.html">Alerts</a>
+                                    <a className="nav-link" href="components-badges.html">Badges</a>
+                                    <a className="nav-link" href="components-buttons.html">Buttons</a>
+                                    <a className="nav-link" href="components-cards.html">Cards</a>
+                                    <a className="nav-link" href="components-chips.html">Chips</a>
+                                    <a className="nav-link" href="components-dropdowns.html">Dropdowns</a>
+                                    <a className="nav-link" href="components-icon-buttons.html">Icon Buttons</a>
+                                    <a className="nav-link" href="components-modals.html">Modals</a>
+                                    <a className="nav-link" href="components-navigation.html">Navigation</a>
+                                    <a className="nav-link" href="components-progress.html">Progress</a>
+                                    <a className="nav-link" href="components-spinners.html">Spinners</a>
+                                    <a className="nav-link" href="components-tooltips.html">Tooltips</a>
                                 </nav>
                             </div>
                             
-                            <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
-                                <div class="nav-link-icon"><i class="material-icons">amp_stories</i></div>
+                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
+                                <div className="nav-link-icon"><i className="material-icons">amp_stories</i></div>
                                 Content
-                                <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                             </a>
                             
-                            <div class="collapse" id="collapseContent" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav class="drawer-menu-nested nav">
-                                    <a class="nav-link" href="content-icons.html">Icons</a>
-                                    <a class="nav-link" href="content-tables.html">Tables</a>
-                                    <a class="nav-link" href="content-typography.html">Typography</a>
+                            <div className="collapse" id="collapseContent" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+                                <nav className="drawer-menu-nested nav">
+                                    <a className="nav-link" href="content-icons.html">Icons</a>
+                                    <a className="nav-link" href="content-tables.html">Tables</a>
+                                    <a className="nav-link" href="content-typography.html">Typography</a>
                                 </nav>
                             </div>
                             
-                            <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseForms" aria-expanded="false" aria-controls="collapseForms">
-                                <div class="nav-link-icon"><i class="material-icons">description</i></div>
+                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseForms" aria-expanded="false" aria-controls="collapseForms">
+                                <div className="nav-link-icon"><i className="material-icons">description</i></div>
                                 Forms
-                                <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                             </a>
                             
-                            <div class="collapse" id="collapseForms" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav class="drawer-menu-nested nav">
-                                    <a class="nav-link" href="forms-inputs.html">Inputs</a>
-                                    <a class="nav-link" href="forms-checks-and-radios.html">Checks &amp; Radio</a>
-                                    <a class="nav-link" href="forms-input-groups.html">Input Groups</a>
-                                    <a class="nav-link" href="forms-range.html">Range</a>
-                                    <a class="nav-link" href="forms-select.html">Select</a>
+                            <div className="collapse" id="collapseForms" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+                                <nav className="drawer-menu-nested nav">
+                                    <a className="nav-link" href="forms-inputs.html">Inputs</a>
+                                    <a className="nav-link" href="forms-checks-and-radios.html">Checks &amp; Radio</a>
+                                    <a className="nav-link" href="forms-input-groups.html">Input Groups</a>
+                                    <a className="nav-link" href="forms-range.html">Range</a>
+                                    <a className="nav-link" href="forms-select.html">Select</a>
                                 </nav>
                             </div>
                             
-                            <a class="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseUtilities" aria-expanded="false" aria-controls="collapseUtilities">
-                                <div class="nav-link-icon"><i class="material-icons">build</i></div>
+                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseUtilities" aria-expanded="false" aria-controls="collapseUtilities">
+                                <div className="nav-link-icon"><i className="material-icons">build</i></div>
                                 Utilities
-                                <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                             </a>
                             
-                            <div class="collapse" id="collapseUtilities" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav class="drawer-menu-nested nav">
-                                    <a class="nav-link" href="utilities-background.html">Background</a>
-                                    <a class="nav-link" href="utilities-borders.html">Borders</a>
-                                    <a class="nav-link" href="utilities-ripples.html">Ripples</a>
-                                    <a class="nav-link" href="utilities-shadows.html">Shadows</a>
-                                    <a class="nav-link" href="utilities-text.html">Text</a>
-                                    <a class="nav-link" href="utilities-transforms.html">Transforms</a>
+                            <div className="collapse" id="collapseUtilities" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+                                <nav className="drawer-menu-nested nav">
+                                    <a className="nav-link" href="utilities-background.html">Background</a>
+                                    <a className="nav-link" href="utilities-borders.html">Borders</a>
+                                    <a className="nav-link" href="utilities-ripples.html">Ripples</a>
+                                    <a className="nav-link" href="utilities-shadows.html">Shadows</a>
+                                    <a className="nav-link" href="utilities-text.html">Text</a>
+                                    <a className="nav-link" href="utilities-transforms.html">Transforms</a>
                                 </nav>
                             </div>
                             
                             
                         </nav>
-                        <div class="drawer-footer border-top">
-                        <div class="d-flex align-items-center">
-                            <i class="material-icons text-muted">account_circle</i>
-                            <div class="ms-3">
-                                <div class="caption">Logged in as:</div>
-                                <div class="small fw-500">Start Bootstrap</div>
+                        <div className="drawer-footer border-top">
+                        <div className="d-flex align-items-center">
+                            <i className="material-icons text-muted">account_circle</i>
+                            <div className="ms-3">
+                                <div className="caption">Logged in as:</div>
+                                <div className="small fw-500">Start Bootstrap</div>
                             </div>
                         </div>
                     </div>
@@ -366,20 +367,20 @@ const Dashboard = () => {
                 
                 <main>
                   
-                    <div class="container-xl p-5">
-                        <div class="row justify-content-between align-items-center mb-5">
-                            <div class="col flex-shrink-0 mb-5 mb-md-0">
-                                <h1 class="display-4 mb-0">Dashboard</h1>
-                                <div class="text-muted">Sales overview &amp; summary</div>
+                    <div className="container-xl p-5">
+                        <div className="row justify-content-between align-items-center mb-5">
+                            <div className="col flex-shrink-0 mb-5 mb-md-0">
+                                <h1 className="display-4 mb-0">Dashboard</h1>
+                                <div className="text-muted">Sales overview &amp; summary</div>
                             </div>
-                            <div class="col-12 col-md-auto">
-                                <div class="d-flex flex-column flex-sm-row gap-3">
-                                    <mwc-select class="mw-50 mb-2 mb-md-0" outlined label="View by">
+                            <div className="col-12 col-md-auto">
+                                <div className="d-flex flex-column flex-sm-row gap-3">
+                                    <mwc-select className="mw-50 mb-2 mb-md-0" outlined label="View by">
                                         <mwc-list-item selected value="0">Order type</mwc-list-item>
                                         <mwc-list-item value="1">Segment</mwc-list-item>
                                         <mwc-list-item value="2">Customer</mwc-list-item>
                                     </mwc-select>
-                                    <mwc-select class="mw-50" outlined label="Sales from">
+                                    <mwc-select className="mw-50" outlined label="Sales from">
                                         <mwc-list-item value="0">Last 7 days</mwc-list-item>
                                         <mwc-list-item value="1">Last 30 days</mwc-list-item>
                                         <mwc-list-item value="2">Last month</mwc-list-item>
@@ -389,184 +390,184 @@ const Dashboard = () => {
                             </div>
                         </div>
                         
-                        <div class="row gx-5">
-                            <div class="col-xxl-3 col-md-6 mb-5">
-                                <div class="card card-raised bg-primary text-white">
-                                    <div class="card-body px-4">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div class="me-2">
-                                                <div class="display-5 text-white">101.1K</div>
-                                                <div class="card-text">Downloads</div>
+                        <div className="row gx-5">
+                            <div className="col-xxl-3 col-md-6 mb-5">
+                                <div className="card card-raised bg-primary text-white">
+                                    <div className="card-body px-4">
+                                        <div className="d-flex justify-content-between align-items-center mb-2">
+                                            <div className="me-2">
+                                                <div className="display-5 text-white">101.1K</div>
+                                                <div className="card-text">Downloads</div>
                                             </div>
-                                            <div class="icon-circle bg-white-50 text-primary"><i class="material-icons">download</i></div>
+                                            <div className="icon-circle bg-white-50 text-primary"><i className="material-icons">download</i></div>
                                         </div>
-                                        <div class="card-text">
-                                            <div class="d-inline-flex align-items-center">
-                                                <i class="material-icons icon-xs">arrow_upward</i>
-                                                <div class="caption fw-500 me-2">3%</div>
-                                                <div class="caption">from last month</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xxl-3 col-md-6 mb-5">
-                                <div class="card card-raised bg-warning text-white">
-                                    <div class="card-body px-4">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div class="me-2">
-                                                <div class="display-5 text-white">12.2K</div>
-                                                <div class="card-text">Purchases</div>
-                                            </div>
-                                            <div class="icon-circle bg-white-50 text-warning"><i class="material-icons">storefront</i></div>
-                                        </div>
-                                        <div class="card-text">
-                                            <div class="d-inline-flex align-items-center">
-                                                <i class="material-icons icon-xs">arrow_upward</i>
-                                                <div class="caption fw-500 me-2">3%</div>
-                                                <div class="caption">from last month</div>
+                                        <div className="card-text">
+                                            <div className="d-inline-flex align-items-center">
+                                                <i className="material-icons icon-xs">arrow_upward</i>
+                                                <div className="caption fw-500 me-2">3%</div>
+                                                <div className="caption">from last month</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xxl-3 col-md-6 mb-5">
-                                <div class="card card-raised bg-secondary text-white">
-                                    <div class="card-body px-4">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div class="me-2">
-                                                <div class="display-5 text-white">5.3K</div>
-                                                <div class="card-text">Customers</div>
+                            <div className="col-xxl-3 col-md-6 mb-5">
+                                <div className="card card-raised bg-warning text-white">
+                                    <div className="card-body px-4">
+                                        <div className="d-flex justify-content-between align-items-center mb-2">
+                                            <div className="me-2">
+                                                <div className="display-5 text-white">12.2K</div>
+                                                <div className="card-text">Purchases</div>
                                             </div>
-                                            <div class="icon-circle bg-white-50 text-secondary"><i class="material-icons">people</i></div>
+                                            <div className="icon-circle bg-white-50 text-warning"><i className="material-icons">storefront</i></div>
                                         </div>
-                                        <div class="card-text">
-                                            <div class="d-inline-flex align-items-center">
-                                                <i class="material-icons icon-xs">arrow_upward</i>
-                                                <div class="caption fw-500 me-2">3%</div>
-                                                <div class="caption">from last month</div>
+                                        <div className="card-text">
+                                            <div className="d-inline-flex align-items-center">
+                                                <i className="material-icons icon-xs">arrow_upward</i>
+                                                <div className="caption fw-500 me-2">3%</div>
+                                                <div className="caption">from last month</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xxl-3 col-md-6 mb-5">
-                                <div class="card card-raised bg-info text-white">
-                                    <div class="card-body px-4">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div class="me-2">
-                                                <div class="display-5 text-white">7</div>
-                                                <div class="card-text">Channels</div>
+                            <div className="col-xxl-3 col-md-6 mb-5">
+                                <div className="card card-raised bg-secondary text-white">
+                                    <div className="card-body px-4">
+                                        <div className="d-flex justify-content-between align-items-center mb-2">
+                                            <div className="me-2">
+                                                <div className="display-5 text-white">5.3K</div>
+                                                <div className="card-text">Customers</div>
                                             </div>
-                                            <div class="icon-circle bg-white-50 text-info"><i class="material-icons">devices</i></div>
+                                            <div className="icon-circle bg-white-50 text-secondary"><i className="material-icons">people</i></div>
                                         </div>
-                                        <div class="card-text">
-                                            <div class="d-inline-flex align-items-center">
-                                                <i class="material-icons icon-xs">arrow_upward</i>
-                                                <div class="caption fw-500 me-2">3%</div>
-                                                <div class="caption">from last month</div>
+                                        <div className="card-text">
+                                            <div className="d-inline-flex align-items-center">
+                                                <i className="material-icons icon-xs">arrow_upward</i>
+                                                <div className="caption fw-500 me-2">3%</div>
+                                                <div className="caption">from last month</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-xxl-3 col-md-6 mb-5">
+                                <div className="card card-raised bg-info text-white">
+                                    <div className="card-body px-4">
+                                        <div className="d-flex justify-content-between align-items-center mb-2">
+                                            <div className="me-2">
+                                                <div className="display-5 text-white">7</div>
+                                                <div className="card-text">Channels</div>
+                                            </div>
+                                            <div className="icon-circle bg-white-50 text-info"><i className="material-icons">devices</i></div>
+                                        </div>
+                                        <div className="card-text">
+                                            <div className="d-inline-flex align-items-center">
+                                                <i className="material-icons icon-xs">arrow_upward</i>
+                                                <div className="caption fw-500 me-2">3%</div>
+                                                <div className="caption">from last month</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row gx-5">
+                        <div className="row gx-5">
                             
-                            <div class="col-lg-8 mb-5">
-                                <div class="card card-raised h-100">
-                                    <div class="card-header bg-primary text-white px-4">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="me-4">
-                                                <h2 class="card-title text-white mb-0">Revenue Breakdown</h2>
-                                                <div class="card-subtitle">Compared to previous year</div>
+                            <div className="col-lg-8 mb-5">
+                                <div className="card card-raised h-100">
+                                    <div className="card-header bg-primary text-white px-4">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div className="me-4">
+                                                <h2 className="card-title text-white mb-0">Revenue Breakdown</h2>
+                                                <div className="card-subtitle">Compared to previous year</div>
                                             </div>
-                                            <div class="d-flex gap-2 me-n2">
-                                                <button class="btn btn-lg btn-text-white btn-icon" type="button"><i class="material-icons">download</i></button>
-                                                <button class="btn btn-lg btn-text-white btn-icon" type="button"><i class="material-icons">print</i></button>
+                                            <div className="d-flex gap-2 me-n2">
+                                                <button className="btn btn-lg btn-text-white btn-icon" type="button"><i className="material-icons">download</i></button>
+                                                <button className="btn btn-lg btn-text-white btn-icon" type="button"><i className="material-icons">print</i></button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-body p-4">
-                                        <div class="row gx-4">
-                                            <div class="col-12 col-xxl-2">
-                                                <div class="d-flex flex-column flex-md-row flex-xxl-column align-items-center align-items-xl-start justify-content-between">
-                                                    <div class="mb-4 text-center text-md-start">
-                                                        <div class="text-xs font-monospace text-muted mb-1">Actual Revenue</div>
-                                                        <div class="display-5 fw-500">$59,482</div>
+                                    <div className="card-body p-4">
+                                        <div className="row gx-4">
+                                            <div className="col-12 col-xxl-2">
+                                                <div className="d-flex flex-column flex-md-row flex-xxl-column align-items-center align-items-xl-start justify-content-between">
+                                                    <div className="mb-4 text-center text-md-start">
+                                                        <div className="text-xs font-monospace text-muted mb-1">Actual Revenue</div>
+                                                        <div className="display-5 fw-500">$59,482</div>
                                                     </div>
-                                                    <div class="mb-4 text-center text-md-start">
-                                                        <div class="text-xs font-monospace text-muted mb-1">Revenue Target</div>
-                                                        <div class="display-5 fw-500">$50,000</div>
+                                                    <div className="mb-4 text-center text-md-start">
+                                                        <div className="text-xs font-monospace text-muted mb-1">Revenue Target</div>
+                                                        <div className="display-5 fw-500">$50,000</div>
                                                     </div>
-                                                    <div class="mb-4 text-center text-md-start">
-                                                        <div class="text-xs font-monospace text-muted mb-1">Goal</div>
-                                                        <div class="display-5 fw-500 text-success">119%</div>
+                                                    <div className="mb-4 text-center text-md-start">
+                                                        <div className="text-xs font-monospace text-muted mb-1">Goal</div>
+                                                        <div className="display-5 fw-500 text-success">119%</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-xxl-10"><canvas id="dashboardBarChart"></canvas></div>
+                                            <div className="col-12 col-xxl-10"><canvas id="dashboardBarChart"></canvas></div>
                                         </div>
                                     </div>
-                                    <div class="card-footer bg-transparent position-relative ripple-gray">
-                                        <a class="d-flex align-items-center justify-content-end text-decoration-none stretched-link text-primary" href="#!">
-                                            <div class="fst-button">Open Report</div>
-                                            <i class="material-icons icon-sm ms-1">chevron_right</i>
+                                    <div className="card-footer bg-transparent position-relative ripple-gray">
+                                        <a className="d-flex align-items-center justify-content-end text-decoration-none stretched-link text-primary" href="#!">
+                                            <div className="fst-button">Open Report</div>
+                                            <i className="material-icons icon-sm ms-1">chevron_right</i>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="col-lg-4 mb-5">
-                                <div class="card card-raised h-100">
-                                    <div class="card-header bg-primary text-white px-4">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="me-4">
-                                                <h2 class="card-title text-white mb-0">Segments</h2>
-                                                <div class="card-subtitle">Revenue sources</div>
+                            <div className="col-lg-4 mb-5">
+                                <div className="card card-raised h-100">
+                                    <div className="card-header bg-primary text-white px-4">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div className="me-4">
+                                                <h2 className="card-title text-white mb-0">Segments</h2>
+                                                <div className="card-subtitle">Revenue sources</div>
                                             </div>
-                                            <div class="dropdown">
-                                                <button class="btn btn-lg btn-text-light btn-icon me-n2 dropdown-toggle" id="segmentsDropdownButton" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></button>
-                                                <ul class="dropdown-menu" aria-labelledby="segmentsDropdownButton">
-                                                    <li><a class="dropdown-item" href="#!">Action</a></li>
-                                                    <li><a class="dropdown-item" href="#!">Another action</a></li>
-                                                    <li><a class="dropdown-item" href="#!">Something else here</a></li>
-                                                    <li><hr class="dropdown-divider" /></li>
-                                                    <li><a class="dropdown-item" href="#!">Separated link</a></li>
-                                                    <li><a class="dropdown-item" href="#!">Separated link</a></li>
+                                            <div className="dropdown">
+                                                <button className="btn btn-lg btn-text-light btn-icon me-n2 dropdown-toggle" id="segmentsDropdownButton" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></button>
+                                                <ul className="dropdown-menu" aria-labelledby="segmentsDropdownButton">
+                                                    <li><a className="dropdown-item" href="#!">Action</a></li>
+                                                    <li><a className="dropdown-item" href="#!">Another action</a></li>
+                                                    <li><a className="dropdown-item" href="#!">Something else here</a></li>
+                                                    <li><hr className="dropdown-divider" /></li>
+                                                    <li><a className="dropdown-item" href="#!">Separated link</a></li>
+                                                    <li><a className="dropdown-item" href="#!">Separated link</a></li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-body p-4">
-                                        <div class="d-flex h-100 w-100 align-items-center justify-content-center">
-                                            <div class="w-100" style={{ maxWidth: '20rem' }}><canvas id="myPieChart"></canvas></div>
+                                    <div className="card-body p-4">
+                                        <div className="d-flex h-100 w-100 align-items-center justify-content-center">
+                                            <div className="w-100" style={{ maxWidth: '20rem' }}><canvas id="myPieChart"></canvas></div>
                                         </div>
                                     </div>
-                                    <div class="card-footer bg-transparent position-relative ripple-gray">
-                                        <a class="d-flex align-items-center justify-content-end text-decoration-none stretched-link text-primary" href="#!">
-                                            <div class="fst-button">Open Report</div>
-                                            <i class="material-icons icon-sm ms-1">chevron_right</i>
+                                    <div className="card-footer bg-transparent position-relative ripple-gray">
+                                        <a className="d-flex align-items-center justify-content-end text-decoration-none stretched-link text-primary" href="#!">
+                                            <div className="fst-button">Open Report</div>
+                                            <i className="material-icons icon-sm ms-1">chevron_right</i>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                        
-                        <div class="card card-raised">
-                            <div class="card-header bg-primary text-white px-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="me-4">
-                                        <h2 class="card-title text-white mb-0">Sales</h2>
-                                        <div class="card-subtitle">Details and history</div>
+                        <div className="card card-raised">
+                            <div className="card-header bg-primary text-white px-4">
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div className="me-4">
+                                        <h2 className="card-title text-white mb-0">Sales</h2>
+                                        <div className="card-subtitle">Details and history</div>
                                     </div>
-                                    <div class="d-flex gap-2">
-                                        <button class="btn btn-lg btn-text-white btn-icon" type="button"><i class="material-icons">download</i></button>
-                                        <button class="btn btn-lg btn-text-white btn-icon" type="button"><i class="material-icons">print</i></button>
+                                    <div className="d-flex gap-2">
+                                        <button className="btn btn-lg btn-text-white btn-icon" type="button"><i className="material-icons">download</i></button>
+                                        <button className="btn btn-lg btn-text-white btn-icon" type="button"><i className="material-icons">print</i></button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body p-4">
+                            <div className="card-body p-4">
                                
                                 <table id="datatablesSimple">
                                     <thead>
@@ -1286,14 +1287,14 @@ const Dashboard = () => {
                     </div>
                 </main>
                 
-                <footer class="py-4 mt-auto border-top" style={{ minHeight: '74px' }}>
-                    <div class="container-xl px-5">
-                        <div class="d-flex flex-column flex-sm-row align-items-center justify-content-sm-between small">
-                            <div class="me-sm-2">Copyright &copy; RK Energies 2024</div>
-                            <div class="d-flex ms-sm-2">
-                                <a class="text-decoration-none" href="#!">Privacy Policy</a>
-                                <div class="mx-1">&middot;</div>
-                                <a class="text-decoration-none" href="#!">Terms &amp; Conditions</a>
+                <footer className="py-4 mt-auto border-top" style={{ minHeight: '74px' }}>
+                    <div className="container-xl px-5">
+                        <div className="d-flex flex-column flex-sm-row align-items-center justify-content-sm-between small">
+                            <div className="me-sm-2">Copyright &copy; RK Energies 2024</div>
+                            <div className="d-flex ms-sm-2">
+                                <a className="text-decoration-none" href="#!">Privacy Policy</a>
+                                <div className="mx-1">&middot;</div>
+                                <a className="text-decoration-none" href="#!">Terms &amp; Conditions</a>
                             </div>
                         </div>
                     </div>
@@ -1302,7 +1303,7 @@ const Dashboard = () => {
         </div>
                 </div>
             </div>
-       
+            
     );
 };
 
