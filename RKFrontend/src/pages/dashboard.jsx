@@ -157,193 +157,25 @@ const Dashboard = () => {
                             
                             <div className="drawer-menu-heading">Interface</div>
                             
-                            <a className="nav-link d-flex " href="index.html">
-                                <div className="nav-link-icon  me-4"><i className="material-icons">language</i></div>
+                            <a className="nav-link d-flex " href="/dashboard">
+                                <div className="nav-link-icon  me-4"><i className="material-icons">dashboard</i></div>
                                 Dashboard
                             </a>
                            
                             <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
-                                <div className="nav-link-icon"><i className="material-icons">dashboard</i></div>
+                                <div className="nav-link-icon"><i className="material-icons">view_compact</i></div>
                                 Theme
                                 <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
                             </a>
                            
                             <div className="collapse" id="collapseDashboards" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
                                 <nav className="drawer-menu-nested nav">
-                                    <a className="nav-link" href="app-dashboard-default.html">Default</a>
-                                    <a className="nav-link" href="app-dashboard-minimal.html">Minimal</a>
-                                    <a className="nav-link" href="app-dashboard-analytics.html">Analytics</a>
-                                    <a className="nav-link" href="app-dashboard-accounting.html">Accounting</a>
-                                    <a className="nav-link" href="app-dashboard-orders.html">Orders</a>
-                                    <a className="nav-link" href="app-dashboard-projects.html">Projects</a>
+                                    <a className="nav-link" href="app-dashboard-default.html">Light</a>
+                                    <a className="nav-link" href="app-dashboard-minimal.html">Dark</a>
+                                    
                                 </nav>
                             </div>
-                            
-                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div className="nav-link-icon"><i className="material-icons">view_compact</i></div>
-                                Layouts
-                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                            </a>
-                           
-                            <div className="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav className="drawer-menu-nested nav">
-                                    <a className="nav-link" href="layout-dark.html">Dark Theme</a>
-                                    <a className="nav-link" href="layout-light.html">Light Theme</a>
-                                    <a className="nav-link" href="layout-static.html">Static Navigation</a>
-                                </nav>
-                            </div>
-                            
-                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div className="nav-link-icon"><i className="material-icons">layers</i></div>
-                                Pages
-                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                            </a>
-                            
-                            <div className="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#drawerAccordion">
-                                <nav className="drawer-menu-nested nav accordion" id="drawerAccordionPages">
-                                   
-                                    <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAccount" aria-expanded="false" aria-controls="pagesCollapseAccount">
-                                        Account
-                                        <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                                    </a>
-                                   
-                                    <div className="collapse" id="pagesCollapseAccount" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
-                                        <nav className="drawer-menu-nested nav">
-                                            <a className="nav-link" href="app-account-billing.html">Billing</a>
-                                            <a className="nav-link" href="app-account-notifications.html">Notifications</a>
-                                            <a className="nav-link" href="app-account-profile.html">Profile</a>
-                                            <a className="nav-link" href="app-account-security.html">Security</a>
-                                        </nav>
-                                    </div>
-                                    
-                                    <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                                    </a>
-                                  
-                                    <div className="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
-                                        <nav className="drawer-menu-nested nav">
-                                            <a className="nav-link" href="app-auth-login-basic.html">Login 1</a>
-                                            <a className="nav-link" href="app-auth-login-styled-1.html">Login 2</a>
-                                            <a className="nav-link" href="app-auth-login-styled-2.html">Login 3</a>
-                                            <a className="nav-link" href="app-auth-register-basic.html">Register</a>
-                                            <a className="nav-link" href="app-auth-password-basic.html">Forgot Password</a>
-                                        </nav>
-                                    </div>
-                                    
-                                    <a className="nav-link" href="app-blank-page.html">Blank Page</a>
-                                   
-                                    <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Error
-                                        <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                                    </a>
-                                    
-                                    <div className="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
-                                        <nav className="drawer-menu-nested nav">
-                                            <a className="nav-link" href="app-error-400.html">400 Error Page</a>
-                                            <a className="nav-link" href="app-error-401.html">401 Error Page</a>
-                                            <a className="nav-link" href="app-error-403.html">403 Error Page</a>
-                                            <a className="nav-link" href="app-error-404.html">404 Error Page</a>
-                                            <a className="nav-link" href="app-error-429.html">429 Error Page</a>
-                                            <a className="nav-link" href="app-error-500.html">500 Error Page</a>
-                                            <a className="nav-link" href="app-error-503.html">503 Error Page</a>
-                                            <a className="nav-link" href="app-error-504.html">504 Error Page</a>
-                                        </nav>
-                                    </div>
-                                    
-                                    <a className="nav-link" href="app-invoice.html">Invoice</a>
-                                    
-                                    <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseKnowledgebase" aria-expanded="false" aria-controls="pagesCollapseKnowledgebase">
-                                        Knowledgebase
-                                        <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                                    </a>
-                                    
-                                    <div className="collapse" id="pagesCollapseKnowledgebase" aria-labelledby="headingOne" data-bs-parent="#drawerAccordionPages">
-                                        <nav className="drawer-menu-nested nav">
-                                            <a className="nav-link" href="app-knowledgebase-home.html">Home</a>
-                                            <a className="nav-link" href="app-knowledgebase-categories.html">Categories</a>
-                                            <a className="nav-link" href="app-knowledgebase-article.html">Article</a>
-                                        </nav>
-                                    </div>
-                                    
-                                    <a className="nav-link" href="app-pricing.html">Pricing</a>
-                                </nav>
-                            </div>
-                            
-                            <div className="drawer-menu-divider"></div>
-                            
-                            <div className="drawer-menu-heading">UI Toolkit</div>
-                          
-                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
-                                <div className="nav-link-icon"><i className="material-icons">widgets</i></div>
-                                Components
-                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                            </a>
-                            
-                            <div className="collapse" id="collapseComponents" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav className="drawer-menu-nested nav">
-                                    <a className="nav-link" href="components-alerts.html">Alerts</a>
-                                    <a className="nav-link" href="components-badges.html">Badges</a>
-                                    <a className="nav-link" href="components-buttons.html">Buttons</a>
-                                    <a className="nav-link" href="components-cards.html">Cards</a>
-                                    <a className="nav-link" href="components-chips.html">Chips</a>
-                                    <a className="nav-link" href="components-dropdowns.html">Dropdowns</a>
-                                    <a className="nav-link" href="components-icon-buttons.html">Icon Buttons</a>
-                                    <a className="nav-link" href="components-modals.html">Modals</a>
-                                    <a className="nav-link" href="components-navigation.html">Navigation</a>
-                                    <a className="nav-link" href="components-progress.html">Progress</a>
-                                    <a className="nav-link" href="components-spinners.html">Spinners</a>
-                                    <a className="nav-link" href="components-tooltips.html">Tooltips</a>
-                                </nav>
-                            </div>
-                            
-                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
-                                <div className="nav-link-icon"><i className="material-icons">amp_stories</i></div>
-                                Content
-                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                            </a>
-                            
-                            <div className="collapse" id="collapseContent" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav className="drawer-menu-nested nav">
-                                    <a className="nav-link" href="content-icons.html">Icons</a>
-                                    <a className="nav-link" href="content-tables.html">Tables</a>
-                                    <a className="nav-link" href="content-typography.html">Typography</a>
-                                </nav>
-                            </div>
-                            
-                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseForms" aria-expanded="false" aria-controls="collapseForms">
-                                <div className="nav-link-icon"><i className="material-icons">description</i></div>
-                                Forms
-                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                            </a>
-                            
-                            <div className="collapse" id="collapseForms" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav className="drawer-menu-nested nav">
-                                    <a className="nav-link" href="forms-inputs.html">Inputs</a>
-                                    <a className="nav-link" href="forms-checks-and-radios.html">Checks &amp; Radio</a>
-                                    <a className="nav-link" href="forms-input-groups.html">Input Groups</a>
-                                    <a className="nav-link" href="forms-range.html">Range</a>
-                                    <a className="nav-link" href="forms-select.html">Select</a>
-                                </nav>
-                            </div>
-                            
-                            <a className="nav-link collapsed d-flex align-items-center justify-content-between" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseUtilities" aria-expanded="false" aria-controls="collapseUtilities">
-                                <div className="nav-link-icon"><i className="material-icons">build</i></div>
-                                Utilities
-                                <div className="drawer-collapse-arrow"><i className="material-icons">expand_more</i></div>
-                            </a>
-                            
-                            <div className="collapse" id="collapseUtilities" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                                <nav className="drawer-menu-nested nav">
-                                    <a className="nav-link" href="utilities-background.html">Background</a>
-                                    <a className="nav-link" href="utilities-borders.html">Borders</a>
-                                    <a className="nav-link" href="utilities-ripples.html">Ripples</a>
-                                    <a className="nav-link" href="utilities-shadows.html">Shadows</a>
-                                    <a className="nav-link" href="utilities-text.html">Text</a>
-                                    <a className="nav-link" href="utilities-transforms.html">Transforms</a>
-                                </nav>
-                            </div>
-                            
+                              
                             
                         </nav>
                         <div className="drawer-footer border-top">
@@ -351,7 +183,7 @@ const Dashboard = () => {
                             <i className="material-icons text-muted">account_circle</i>
                             <div className="ms-3">
                                 <div className="caption">Logged in as:</div>
-                                <div className="small fw-500">Start Bootstrap</div>
+                                <div className="small fw-500">RK energies admin</div>
                             </div>
                         </div>
                     </div>

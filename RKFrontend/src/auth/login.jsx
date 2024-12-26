@@ -6,8 +6,8 @@ import "../App.css";
 
 const Login = () => {
   return (
-    <div className="bg-pattern-waihou">
-      <div id="layoutAuthentication">
+    <div >
+      <div className="bg-pattern-waihou" id="layoutAuthentication">
 
         <div id="layoutAuthentication_content">
 
@@ -15,8 +15,8 @@ const Login = () => {
 
             <div className="container">
               <div className="row justify-content-center">
-                <div className="col-xxl-10 col-xl-10 col-lg-12">
-                  <div className="card card-raised shadow-10 mt-5 mt-xl-10 mb-4">
+                <div className="col-xxl-8 col-xl-8 col-lg-12">
+                  <div className="card card-raised shadow-10 mt-1 mt-xl-3 mb-1" >
                     <div className="row g-0">
                       <div className="col-lg-5 col-md-6">
                         <div className="card-body p-5">
@@ -51,7 +51,7 @@ const Login = () => {
                       <div
                         className="col-lg-7 col-md-6 d-none d-md-block"
                         style={{
-                          backgroundImage: "url(https://source.unsplash.com/-uHVRvDr7pg/1600x900)",
+                          backgroundImage: "url('/logo1.jpeg')",
                           backgroundSize: "cover",
                           backgroundRepeat: "no-repeat",
                           backgroundPosition: "center"
