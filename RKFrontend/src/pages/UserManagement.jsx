@@ -16,7 +16,7 @@ const UserManagement = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('https://your-backend-url.com/api/users/');
+            const response = await fetch('https://rk-energies-u9cj.onrender.com/backendapi/users/');
             const data = await response.json();
             setUsers(data);
         } catch (error) {
@@ -43,11 +43,11 @@ const UserManagement = () => {
             username,
             email,
             password,
-            station
+            station,
         };
 
         try {
-            const response = await fetch('https://rk-energies-u9cj.onrender.com/backendapi/users/', {
+            const response = await fetch(`https://rk-energies-u9cj.onrender.com/backendapi/users/${selectedUser ? selectedUser.id : ''}`, {
                 method: selectedUser ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',

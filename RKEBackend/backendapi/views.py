@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework import status
 from django.shortcuts import render, redirect
-
+from backend.models import CustomUser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
@@ -35,7 +35,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views import View
 import json
-from  backend.models import User
+
 load_dotenv()
 
 
@@ -148,6 +148,53 @@ class espPayloadHandling(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 
+
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
+def users(request):
+    if request.method == 'GET':
+        users = CustomUser.objects.all().values('id', 'username', 'email', 'password', 'station')
+        return Response(users, status=status.HTTP_200_OK)
+
+    if request.method == 'POST':
+        try:
+            data = request.data
+            username = data['username']
+            email = data.get('email')
+            password = data['password']
+            station = data['station']
+
+            if CustomUser.objects.filter(username=username).exists():
+                return Response({"detail": "User already exists. Log in"}, status=status.HTTP_400_BAD_REQUEST)
+
+            user = CustomUser.objects.create(
+                username=username,
+                email=email,
+                password=make_password(password),
+                station=station
+            )
+            user.save()
+            return Response({"detail": "User created successfully!"}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def edit_user(request, pk):
+    try:
+        data = request.data
+        user = get_object_or_404(CustomUser, pk=pk)
+        user.username = data['username']
+        user.email = data['email']
+        user.password = make_password(data['password']) if data['password'] else user.password
+        user.station = data['station']
+        user.save()
+
+        return Response({"detail": "User updated successfully!"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
