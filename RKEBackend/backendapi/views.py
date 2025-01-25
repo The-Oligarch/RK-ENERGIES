@@ -39,34 +39,83 @@ import json
 load_dotenv()
 
 
-    
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.hashers import make_password
+from backend.models import CustomUser
+from django.shortcuts import get_object_or_404
+
+@api_view(['POST'])
 @permission_classes([AllowAny])
-class UserView(View):
-    def get(self, request):
-        users = User.objects.all().values('id', 'username', 'email', 'password', 'station')
-        return JsonResponse(list(users), safe=False)
+def register(request):
+    try:
+        data = request.data
+        
+        username = data['username']
+        email = data.get('email')
+        password = data['password']
+        station = data['station']
 
-    @method_decorator(csrf_exempt)
-    def post(self, request):
-        data = json.loads(request.body)
-        user = User.objects.create(
-            username=data['username'],
-            email=data['email'],
-            password=data['password'],
-            station=data['station']
+        if CustomUser.objects.filter(username=username).exists():
+            return Response({"detail": "User already exists. Log in"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = CustomUser.objects.create(
+            username=username,
+            email=email,
+            password=make_password(password),
+            station=station
         )
-        return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email, 'password': user.password, 'station': user.station})
+        user.save()
+        return Response({"detail": "User created successfully!"}, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    @method_decorator(csrf_exempt)
-    def put(self, request):
-        data = json.loads(request.body)
-        user = get_object_or_404(User, id=data['id'])
+@api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
+def users(request):
+    if request.method == 'GET':
+        users = CustomUser.objects.all().values('id', 'username', 'email', 'password', 'station')
+        return Response(users, status=status.HTTP_200_OK)
+
+    if request.method == 'POST':
+        try:
+            data = request.data
+            username = data['username']
+            email = data.get('email')
+            password = data['password']
+            station = data['station']
+
+            if CustomUser.objects.filter(username=username).exists():
+                return Response({"detail": "User already exists. Log in"}, status=status.HTTP_400_BAD_REQUEST)
+
+            user = CustomUser.objects.create(
+                username=username,
+                email=email,
+                password=make_password(password),
+                station=station
+            )
+            user.save()
+            return Response({"detail": "User created successfully!"}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def edit_user(request, pk):
+    try:
+        data = request.data
+        user = get_object_or_404(CustomUser, pk=pk)
         user.username = data['username']
         user.email = data['email']
-        user.password = data['password']
+        user.password = make_password(data['password']) if data['password'] else user.password
         user.station = data['station']
         user.save()
-        return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email, 'password': user.password, 'station': user.station})
+
+        return Response({"detail": "User updated successfully!"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
 @permission_classes([AllowAny])
 class espPayloadHandling(APIView):

@@ -33,7 +33,7 @@ const UserManagement = () => {
         setSelectedUser(user);
         setUsername(user ? user.username : '');
         setEmail(user ? user.email : '');
-        setPassword(user ? user.password : '');
+        setPassword('');
         setStation(user ? user.station : '');
         setShow(true);
     };
@@ -79,7 +79,6 @@ const UserManagement = () => {
                             <th>ID</th>
                             <th>Username</th>
                             <th>Email</th>
-                            <th>Password</th>
                             <th>Station</th>
                             <th>Actions</th>
                         </tr>
@@ -90,7 +89,6 @@ const UserManagement = () => {
                                 <td>{user.id}</td>
                                 <td>{user.username}</td>
                                 <td>{user.email}</td>
-                                <td>{user.password}</td>
                                 <td>{user.station}</td>
                                 <td>
                                     <Button variant="primary" onClick={() => handleShow(user)}>Edit</Button>

@@ -4,8 +4,7 @@ import backgroundIcon2 from "../assets/img/icons/background.svg";
 import "../App.css";
 
 const Register = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [verifyPassword, setVerifyPassword] = useState('');
@@ -19,7 +18,7 @@ const Register = () => {
     const handleRegister = async (event) => {
         event.preventDefault();
 
-        if (!firstName || !lastName || !email || !password || !verifyPassword || !station) {
+        if (!username || !email || !password || !verifyPassword || !station) {
             setError('All fields are required');
             return;
         }
@@ -35,8 +34,7 @@ const Register = () => {
         }
 
         const data = {
-            firstName,
-            lastName,
+            username,
             email,
             password,
             station,
@@ -58,7 +56,7 @@ const Register = () => {
             if (response.ok) {
                 navigate('/');
             } else {
-                setError(result.message || 'Registration failed');
+                setError(result.detail || 'Registration failed');
             }
         } catch (error) {
             setError('An error occurred. Please try again.');
@@ -83,27 +81,15 @@ const Register = () => {
                                         </div>
                                         {error && <div className="alert alert-danger">{error}</div>}
                                         <form onSubmit={handleRegister}>
-                                            <div className="row">
-                                                <div className="col-sm-6 mb-4">
-                                                    <input
-                                                        className="form-control"
-                                                        type="text"
-                                                        placeholder="First Name"
-                                                        value={firstName}
-                                                        onChange={(e) => setFirstName(e.target.value)}
-                                                        disabled={loading}
-                                                    />
-                                                </div>
-                                                <div className="col-sm-6 mb-4">
-                                                    <input
-                                                        className="form-control"
-                                                        type="text"
-                                                        placeholder="Last Name"
-                                                        value={lastName}
-                                                        onChange={(e) => setLastName(e.target.value)}
-                                                        disabled={loading}
-                                                    />
-                                                </div>
+                                            <div className="mb-4">
+                                                <input
+                                                    className="form-control"
+                                                    type="text"
+                                                    placeholder="Username"
+                                                    value={username}
+                                                    onChange={(e) => setUsername(e.target.value)}
+                                                    disabled={loading}
+                                                />
                                             </div>
                                             <div className="mb-4">
                                                 <input

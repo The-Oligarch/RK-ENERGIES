@@ -1,19 +1,15 @@
 from django.urls import path
-from . import views
-
-from .views import register,edit_user
-from .views import UserView
-
+from .views import register, users, edit_user,login
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
 
 urlpatterns = [
-    path('register/', register, name="register"),
-    path('login/', views.login),
-    path('users/', UserView.as_view(), name='user-list'),
-    path('users/<int:pk>/', edit_user, name='edit_user'),
-    
-    
+    path('backendapi/register/', register, name='register'),
+    path('backendapi/users/', users, name='users'),
+    path('backendapi/users/<int:pk>/', edit_user, name='edit_user'),
+    path('login/', login),
 ]
+
+
