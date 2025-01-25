@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import backgroundIcon2 from "../assets/img/icons/background.svg";
+import "../App.css";
 
 const Register = () => {
     const [firstName, setFirstName] = useState('');
@@ -10,22 +11,36 @@ const Register = () => {
     const [verifyPassword, setVerifyPassword] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
     const handleRegister = async (event) => {
         event.preventDefault();
 
+        if (!firstName || !lastName || !email || !password || !verifyPassword) {
+            setError('All fields are required');
+            return;
+        }
+
         if (password !== verifyPassword) {
             setError('Passwords do not match');
             return;
         }
 
+        if (!termsAccepted) {
+            setError('You must accept the terms and conditions');
+            return;
+        }
+
         const data = {
             firstName,
+            lastName,
             email,
             password,
         };
+
+        setLoading(true);
 
         try {
             const response = await fetch('https://rk-energies-u9cj.onrender.com/backendapi/register/', {
@@ -45,6 +60,8 @@ const Register = () => {
             }
         } catch (error) {
             setError('An error occurred. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -66,31 +83,76 @@ const Register = () => {
                                         <form onSubmit={handleRegister}>
                                             <div className="row">
                                                 <div className="col-sm-6 mb-4">
-                                                    <mwc-textfield className="w-100" label="First Name" outlined value={firstName} onInput={(e) => setFirstName(e.target.value)}></mwc-textfield>
+                                                    <input
+                                                        className="form-control"
+                                                        type="text"
+                                                        placeholder="First Name"
+                                                        value={firstName}
+                                                        onChange={(e) => setFirstName(e.target.value)}
+                                                        disabled={loading}
+                                                    />
                                                 </div>
                                                 <div className="col-sm-6 mb-4">
-                                                    <mwc-textfield className="w-100" label="Last Name" outlined value={lastName} onInput={(e) => setLastName(e.target.value)}></mwc-textfield>
+                                                    <input
+                                                        className="form-control"
+                                                        type="text"
+                                                        placeholder="Last Name"
+                                                        value={lastName}
+                                                        onChange={(e) => setLastName(e.target.value)}
+                                                        disabled={loading}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="mb-4">
-                                                <mwc-textfield className="w-100" label="Email Address" outlined value={email} onInput={(e) => setEmail(e.target.value)}></mwc-textfield>
+                                                <input
+                                                    className="form-control"
+                                                    type="email"
+                                                    placeholder="Email Address"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    disabled={loading}
+                                                />
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 mb-4">
-                                                    <mwc-textfield className="w-100" label="Password" outlined icontrailing="visibility_off" type="password" value={password} onInput={(e) => setPassword(e.target.value)}></mwc-textfield>
+                                                    <input
+                                                        className="form-control"
+                                                        type="password"
+                                                        placeholder="Password"
+                                                        value={password}
+                                                        onChange={(e) => setPassword(e.target.value)}
+                                                        disabled={loading}
+                                                    />
                                                 </div>
                                                 <div className="col-sm-6 mb-4">
-                                                    <mwc-textfield className="w-100" label="Verify Password" outlined icontrailing="visibility_off" type="password" value={verifyPassword} onInput={(e) => setVerifyPassword(e.target.value)}></mwc-textfield>
+                                                    <input
+                                                        className="form-control"
+                                                        type="password"
+                                                        placeholder="Verify Password"
+                                                        value={verifyPassword}
+                                                        onChange={(e) => setVerifyPassword(e.target.value)}
+                                                        disabled={loading}
+                                                    />
                                                 </div>
                                             </div>
-                                            <div className="d-flex align-items-center">
-                                                <mwc-formfield label="I agree to the website terms and conditions">
-                                                    <mwc-checkbox checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)}></mwc-checkbox>
-                                                </mwc-formfield>
+                                            <div className="d-flex align-items-center mb-4">
+                                                <input
+                                                    className="form-check-input me-2"
+                                                    type="checkbox"
+                                                    id="termsAccepted"
+                                                    checked={termsAccepted}
+                                                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                                                    disabled={loading}
+                                                />
+                                                <label className="form-check-label" htmlFor="termsAccepted">
+                                                    I agree to the website terms and conditions
+                                                </label>
                                             </div>
                                             <div className="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <a className="small fw-500 text-decoration-none" href="/">Sign in instead</a>
-                                                <button type="submit" className="btn btn-primary">Create Account</button>
+                                                <button type="submit" className="btn btn-primary" disabled={loading}>
+                                                    {loading ? 'Loading...' : 'Create Account'}
+                                                </button>
                                             </div>
                                         </form>
                                     </div>

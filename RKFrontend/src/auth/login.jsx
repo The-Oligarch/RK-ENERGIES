@@ -8,17 +8,24 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [rememberPassword, setRememberPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
+    if (!username || !password) {
+      setError('Username and password are required');
+      return;
+    }
+
     const data = {
       username,
       password,
-      rememberPassword,
     };
+
+    setLoading(true);
 
     try {
       const response = await fetch('https://rk-energies-u9cj.onrender.com/backendapi/login/', {
@@ -32,12 +39,21 @@ const Login = () => {
       const result = await response.json();
 
       if (response.ok) {
+        // Store tokens, username, and email in local storage
+        localStorage.setItem('access_token', result.access);
+        localStorage.setItem('refresh_token', result.refresh);
+        localStorage.setItem('username', result.user.username);
+        localStorage.setItem('email', result.user.email);
+
+        // Navigate to the dashboard
         navigate('/dashboard');
       } else {
-        setError(result.message || 'Login failed');
+        setError(result.detail || 'Login failed');
       }
     } catch (error) {
       setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,36 +82,43 @@ const Login = () => {
                           {error && <div className="alert alert-danger">{error}</div>}
                           <form className="mb-5" onSubmit={handleLogin}>
                             <div className="mb-4">
-                              <mwc-textfield
-                                className="w-100"
-                                label="Username"
-                                outlined
+                              <input
+                                className="form-control"
+                                type="text"
+                                placeholder="Username"
                                 value={username}
-                                onInput={(e) => setUsername(e.target.value)}
-                              ></mwc-textfield>
+                                onChange={(e) => setUsername(e.target.value)}
+                                disabled={loading}
+                              />
                             </div>
                             <div className="mb-4">
-                              <mwc-textfield
-                                className="w-100"
-                                label="Password"
-                                outlined
-                                icontrailing="visibility_off"
+                              <input
+                                className="form-control"
                                 type="password"
+                                placeholder="Password"
                                 value={password}
-                                onInput={(e) => setPassword(e.target.value)}
-                              ></mwc-textfield>
+                                onChange={(e) => setPassword(e.target.value)}
+                                disabled={loading}
+                              />
                             </div>
                             <div className="d-flex align-items-center">
-                              <mwc-formfield label="Remember password">
-                                <mwc-checkbox
+                              <label className="form-check-label" htmlFor="rememberPassword">
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  id="rememberPassword"
                                   checked={rememberPassword}
                                   onChange={(e) => setRememberPassword(e.target.checked)}
-                                ></mwc-checkbox>
-                              </mwc-formfield>
+                                  disabled={loading}
+                                />
+                                Remember password
+                              </label>
                             </div>
                             <div className="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                               <a className="small fw-500 text-decoration-none" href="app-auth-password-basic.html">Forgot Password?</a>
-                              <button type="submit" className="btn btn-primary">Login</button>
+                              <button type="submit" className="btn btn-primary" disabled={loading}>
+                                {loading ? 'Loading...' : 'Login'}
+                              </button>
                             </div>
                           </form>
                           <div className="text-center">

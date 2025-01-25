@@ -5,6 +5,7 @@ class espPayload(models.Model):
     fuel = models.FloatField()
     phone= models.IntegerField()
     amount = models.FloatField()
+    fuelstation = models.CharField()
     created_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

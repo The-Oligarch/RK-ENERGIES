@@ -23071,7 +23071,16 @@ mwc-snackbar {
 mwc-snackbar {
   z-index: 1055;
 }
-
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+.dark-mode .card {
+    background-color: #1e1e1e;
+}
+.dark-mode .navbar {
+    background-color: #333333;
+}
 .top-app-bar {
   padding-left: 0;
   height: 4.5rem;
