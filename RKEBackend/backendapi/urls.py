@@ -6,9 +6,9 @@ from rest_framework_simplejwt.views import (
 
 
 urlpatterns = [
-    path('backendapi/register/', register, name='register'),
-    path('backendapi/users/', users, name='users'),
-    path('backendapi/users/<int:pk>/', edit_user, name='edit_user'),
+    path('register/', register, name='register'),
+    path('users/', users, name='users'),
+    path('users/<int:pk>/', edit_user, name='edit_user'),
     path('login/', login),
 ]
 
