@@ -113,7 +113,7 @@ DATABASES = {
 }
 
 
-#DATABASES['default'] = dj_database_url.parse(os.getenv("DATABASECREDS"))
+DATABASES['default'] = dj_database_url.parse(os.getenv("DATABASECREDS"))
 
 
 
