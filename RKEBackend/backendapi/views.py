@@ -23,7 +23,8 @@ def register(request):
 
     try:
         data = request.data
-        username = data['username']
+        
+        username = data['firstName']
         email = data.get('email')
         password = data['password']
         print(data)
