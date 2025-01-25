@@ -9,6 +9,7 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [verifyPassword, setVerifyPassword] = useState('');
+    const [station, setStation] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ const Register = () => {
     const handleRegister = async (event) => {
         event.preventDefault();
 
-        if (!firstName || !lastName || !email || !password || !verifyPassword) {
+        if (!firstName || !lastName || !email || !password || !verifyPassword || !station) {
             setError('All fields are required');
             return;
         }
@@ -38,6 +39,7 @@ const Register = () => {
             lastName,
             email,
             password,
+            station,
         };
 
         setLoading(true);
@@ -134,6 +136,16 @@ const Register = () => {
                                                         disabled={loading}
                                                     />
                                                 </div>
+                                            </div>
+                                            <div className="mb-4">
+                                                <input
+                                                    className="form-control"
+                                                    type="text"
+                                                    placeholder="Station"
+                                                    value={station}
+                                                    onChange={(e) => setStation(e.target.value)}
+                                                    disabled={loading}
+                                                />
                                             </div>
                                             <div className="d-flex align-items-center mb-4">
                                                 <input

@@ -29,9 +29,45 @@ import os
 import requests
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views import View
+import json
+from  backend.models import User
 load_dotenv()
 
 
+    
+@permission_classes([AllowAny])
+class UserView(View):
+    def get(self, request):
+        users = User.objects.all().values('id', 'username', 'email', 'password', 'station')
+        return JsonResponse(list(users), safe=False)
+
+    @method_decorator(csrf_exempt)
+    def post(self, request):
+        data = json.loads(request.body)
+        user = User.objects.create(
+            username=data['username'],
+            email=data['email'],
+            password=data['password'],
+            station=data['station']
+        )
+        return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email, 'password': user.password, 'station': user.station})
+
+    @method_decorator(csrf_exempt)
+    def put(self, request):
+        data = json.loads(request.body)
+        user = get_object_or_404(User, id=data['id'])
+        user.username = data['username']
+        user.email = data['email']
+        user.password = data['password']
+        user.station = data['station']
+        user.save()
+        return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email, 'password': user.password, 'station': user.station})
+    
 @permission_classes([AllowAny])
 class espPayloadHandling(APIView):
     def post(self, request, *args, **kwargs):
@@ -117,28 +153,33 @@ class espPayloadHandling(APIView):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
-
     try:
         data = request.data
         
-        username = data['firstName']
+        first_name = data['firstName']
+        last_name = data['lastName']
         email = data.get('email')
         password = data['password']
-        print(data)
+        station = data['station']
 
-        if User.objects.filter(username=username).exists():
+        # Check if the user already exists
+        if User.objects.filter(username=email).exists():
             return Response({"detail": "User already exists. Log in"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Create the user
         user = User.objects.create(
-            username=username,
-            email = email,
+            username=email,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
             password=make_password(password),
+            station=station  
         )
         user.save()
+        
         return Response({"detail": "User created successfully!"}, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
