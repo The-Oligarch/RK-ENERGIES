@@ -246,36 +246,7 @@ def edit_user(request, pk):
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def register(request):
-    try:
-        data = request.data
-        
-        first_name = data['firstName']
-        last_name = data['lastName']
-        email = data.get('email')
-        password = data['password']
-        station = data['station']
 
-        # Check if the user already exists
-        if User.objects.filter(username=email).exists():
-            return Response({"detail": "User already exists. Log in"}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Create the user
-        user = User.objects.create(
-            username=email,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            password=make_password(password),
-            station=station  
-        )
-        user.save()
-        
-        return Response({"detail": "User created successfully!"}, status=status.HTTP_201_CREATED)
-    except Exception as e:
-        return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @permission_classes([AllowAny])

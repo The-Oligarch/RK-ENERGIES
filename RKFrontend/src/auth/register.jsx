@@ -43,7 +43,7 @@ const Register = () => {
         setLoading(true);
 
         try {
-            const response = await fetch('https://rk-energies-u9cj.onrender.com/backendapi/register/', {
+            const response = await fetch('https://rk-energies-u9cj.onrender.com/backendapi/backendapi/register/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
