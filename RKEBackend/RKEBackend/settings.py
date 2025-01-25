@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = os.environ.get('DEBUG') 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
-    'https://rk-energies-u9cj.onrender.com/'
+    'https://energies-ks38.onrender.com/'
 ]
 
 INSTALLED_APPS = [
@@ -147,7 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    'https://rk-energies-u9cj.onrender.com',
+    'https://energies-ks38.onrender.com',
     'http://localhost:5173',
     'http://localhost:4280'
    
