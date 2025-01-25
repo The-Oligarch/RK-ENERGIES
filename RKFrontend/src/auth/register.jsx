@@ -23,7 +23,6 @@ const Register = () => {
 
         const data = {
             firstName,
-            lastName,
             email,
             password,
         };
@@ -40,7 +39,7 @@ const Register = () => {
             const result = await response.json();
 
             if (response.ok) {
-                navigate('/login');
+                navigate('/');
             } else {
                 setError(result.message || 'Registration failed');
             }
