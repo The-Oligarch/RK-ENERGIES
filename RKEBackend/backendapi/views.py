@@ -124,6 +124,7 @@ from rest_framework import status
 import json
 
 @permission_classes([AllowAny])
+@csrf_exempt 
 class espPayloadHandling(APIView):
     def post(self, request, *args, **kwargs):
         try:
