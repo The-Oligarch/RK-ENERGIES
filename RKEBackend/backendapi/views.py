@@ -197,6 +197,7 @@ class espPayloadHandling(APIView):
             amount = data.get('amount')
             fuel = data.get('fuel')
             fuelstation = data.get('fuelstation')
+            status = data.get('status', 0)  # Default to 0 if not provided
 
             if None in [phone, amount, fuel, fuelstation]:
                 return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
@@ -205,7 +206,8 @@ class espPayloadHandling(APIView):
                 phone=phone,
                 amount=amount,
                 fuel=fuel,
-                fuelstation=fuelstation
+                fuelstation=fuelstation,
+                status=status
             )
 
             return Response(
@@ -215,8 +217,8 @@ class espPayloadHandling(APIView):
                     "fuel": payload.fuel,
                     "amount": payload.amount,
                     "phone": payload.phone,
-                    "fuelstation": payload.fuelstation
-                
+                    "fuelstation": payload.fuelstation,
+                    "status": payload.status
                 },
                 status=status.HTTP_201_CREATED,
             )
@@ -237,6 +239,7 @@ class espPayloadHandling(APIView):
                     "phone": payload.phone,
                     "fuelstation": payload.fuelstation,
                     "created_at": payload.created_at.isoformat() if hasattr(payload, 'created_at') else None,
+                    "status": payload.status
                 }
                 for payload in payloads
             ]

@@ -1,4 +1,3 @@
-
 #imports
 from pathlib import Path
 import os
@@ -112,8 +111,8 @@ DATABASES = {
     }
 }
 
-
-DATABASES['default'] = dj_database_url.parse(os.getenv("DATABASECREDS"))
+if os.getenv("DATABASECREDS"):
+    DATABASES['default'] = dj_database_url.parse(os.getenv("DATABASECREDS"))
 
 
 

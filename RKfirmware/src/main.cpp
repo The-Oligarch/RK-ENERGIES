@@ -7,8 +7,8 @@
 #include <ArduinoJson.h>
 
 // WiFi credentials
-const char* ssid = "rey";
-const char* password = "a..b..c..d";
+const char* ssid = "Gacalow";
+const char* password = "@Ahmed2001";
 
 // Define the rows and columns for the keypad
 const byte ROWS = 4;
@@ -79,17 +79,45 @@ void connectToWiFi() {
   Serial.println("Connecting to WiFi...");
   WiFi.begin(ssid, password);
   
+  // Display connecting message on LCD
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Connecting");
+  lcd.setCursor(0, 1);
+  lcd.print("to WiFi");
+  
   int attempts = 0;
+  int dots = 0;
   while (WiFi.status() != WL_CONNECTED && attempts < 20) {
     delay(500);
     Serial.print(".");
+    // Update dots on LCD
+    lcd.setCursor(dots + 9, 1); // Position after "to WiFi"
+    lcd.print(".");
+    dots = (dots + 1) % 4; // Cycle through 0-3 dots
+    if (dots == 0) {
+      lcd.setCursor(9, 1);
+      lcd.print("   "); // Clear dots to start over
+    }
     attempts++;
   }
   
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("\nWiFi connected!");
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("WiFi Connected!");
+    delay(1000); // Show connected message briefly
+    displayWaitingMessage(); // Return to waiting message
   } else {
     Serial.println("\nWiFi connection failed!");
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("WiFi Failed!");
+    lcd.setCursor(0, 1);
+    lcd.print("Check Settings");
+    delay(2000); // Show error message longer
+    displayWaitingMessage(); // Return to waiting message
   }
 }
 
@@ -151,6 +179,7 @@ void sendPayload() {
   doc["fuel"] = selectedFuelType;  // Now sending "petrol" or "diesel"
   doc["amount"] = amount.toFloat();
   doc["phone"] = phoneNumber;  // Send phone as string to preserve leading zeros
+  doc["status"] = 0;  // Adding status field with value 0
   
   String jsonString;
   serializeJson(doc, jsonString);

@@ -23,16 +23,19 @@ class CustomUser(AbstractUser):
         return self.username
     
 class espPayload(models.Model):
-    fuel = models.CharField()
-    phone= models.IntegerField()
-    amount = models.FloatField()
-    fuelstation = models.CharField()
-    created_at = models.DateTimeField(auto_now=True)
+    fuel = models.CharField(max_length=100, verbose_name='Fuel Type')
+    phone = models.IntegerField(verbose_name='Phone Number')
+    amount = models.FloatField(verbose_name='Amount')
+    fuelstation = models.CharField(max_length=100, verbose_name='Fuel Station')
+    created_at = models.DateTimeField(auto_now=True, verbose_name='Created At')
+    status = models.IntegerField(default=0, verbose_name='Status')
+
+    class Meta:
+        verbose_name = 'ESP Payload'
+        verbose_name_plural = 'ESP Payloads'
 
     def __str__(self):
        return (
         f"fuel: {self.fuel}, amount: {self.amount}, "
         f"phone: {self.phone}"
         )
-
-    
