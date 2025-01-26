@@ -125,11 +125,73 @@ import json
 
 @permission_classes([AllowAny])
 class espPayloadHandling(APIView):
-    def get(self, request, *args, **kwargs):
-        # Handle GET request here
-        return JsonResponse({"message": "Success"})
+    def post(self, request, *args, **kwargs):
+        try:
+            if isinstance(request.data, dict) and '_content' not in request.data:
+                data = request.data
+                print("Parsed as JSON:", data)
+            else:
+                data = dict(request.data)
+                print("QueryDict Data:", data)
+                
+                data_json = data.get('_content', '')  
+                print(data_json)
+                data_json = data_json[0].replace("\r\n", "")  
+                data = json.loads(data_json) 
+                print("Extracted Data:", data)
+            
+            phone = data.get('phone')
+            amount = data.get('amount')
+            fuel = data.get('fuel')
+            fuelstation = data.get('fuelstation')
 
-    
+            if None in [phone, amount, fuel, fuelstation]:
+                return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
+
+            payload = espPayload.objects.create(
+                phone=phone,
+                amount=amount,
+                fuel=fuel,
+                fuelstation=fuelstation
+            )
+
+            return Response(
+                {
+                    "message": "espPayload saved successfully",
+                    "payload_id": payload.id,
+                    "fuel": payload.fuel,
+                    "amount": payload.amount,
+                    "phone": payload.phone,
+                    "fuelstation": payload.fuelstation
+                
+                },
+                status=status.HTTP_201_CREATED,
+            )
+
+        except json.JSONDecodeError:
+            return Response({"error": "Invalid JSON format"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            payloads = espPayload.objects.all()
+            payload_data = [
+                {
+                    "payload_id": payload.id,
+                    "fuel": payload.fuel,
+                    "amount": payload.amount,
+                    "phone": payload.phone,
+                    "fuelstation": payload.fuelstation,
+                    "created_at": payload.created_at.isoformat() if hasattr(payload, 'created_at') else None,
+                }
+                for payload in payloads
+            ]
+
+            return Response(payload_data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET', 'POST'])
