@@ -123,9 +123,10 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 
-@permission_classes([AllowAny])
-@csrf_exempt 
+@method_decorator(csrf_exempt, name='dispatch')
 class espPayloadHandling(APIView):
+    permission_classes = [AllowAny]
+    
     def post(self, request, *args, **kwargs):
         try:
             if isinstance(request.data, dict) and '_content' not in request.data:
