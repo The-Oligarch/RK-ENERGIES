@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
         return self.username
     
 class espPayload(models.Model):
-    fuel = models.FloatField()
+    fuel = models.CharField()
     phone= models.IntegerField()
     amount = models.FloatField()
     fuelstation = models.CharField()
