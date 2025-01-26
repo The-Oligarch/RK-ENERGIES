@@ -12,5 +12,5 @@ urlpatterns = [
     path('users/<int:pk>/', edit_user, name='edit_user'),
     path('login/', login),
     path('stations/', get_stations, name='get_stations'),
-    path('esppayload/', espPayloadHandling.as_view(), name='payload'),
+    path('esppayload/', espPayloadHandling.as_view, name='payload'),
 ]
