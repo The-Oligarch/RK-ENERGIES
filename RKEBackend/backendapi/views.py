@@ -49,6 +49,12 @@ from requests.auth import HTTPBasicAuth
 import json
 from datetime import datetime
 import base64
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import json
 
 # Step 1: Get the required credentials
 consumer_key = 'YOUR_CONSUMER_KEY'
@@ -167,12 +173,7 @@ def edit_user(request, pk):
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-import json
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class espPayloadHandling(APIView):
@@ -187,31 +188,73 @@ class espPayloadHandling(APIView):
             amount = data.get('amount')
             fuel = data.get('fuel')
             fuelstation = data.get('fuelstation')
-            status_value = data.get('status', 0)  
+            status_value = data.get('status', 0)
 
             if None in [phone, amount, fuel, fuelstation]:
                 return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
 
+            # Store the payload
             payload = espPayload.objects.create(
                 phone=phone,
                 amount=amount,
                 fuel=fuel,
                 fuelstation=fuelstation,
-                status=status_value  
+                status=status_value
             )
 
-            return Response(
-                {
-                    "message": "espPayload saved successfully",
-                    "payload_id": payload.id,
-                    "fuel": payload.fuel,
-                    "amount": payload.amount,
-                    "phone": payload.phone,
-                    "fuelstation": payload.fuelstation,
-                    "status": payload.status
-                },
-                status=status.HTTP_201_CREATED
-            )
+            # Format phone number for M-Pesa (add country code if needed)
+            if phone.startswith('0'):
+                phone_number = '254' + phone[1:]
+            else:
+                phone_number = phone
+
+            try:
+                # Generate access token
+                access_token = generate_access_token(consumer_key, consumer_secret)
+                
+                # Initiate STK push
+                stk_response = stk_push_request(
+                    access_token=access_token,
+                    shortcode=shortcode,
+                    lipa_na_mpesa_online_passkey=lipa_na_mpesa_online_passkey,
+                    phone_number=phone_number,
+                    amount=float(amount),
+                    callback_url=callback_url
+                )
+                
+                # Update payload with M-Pesa response
+                payload.status = 1  # Payment initiated
+                payload.save()
+
+                return Response(
+                    {
+                        "message": "espPayload saved and payment initiated",
+                        "payload_id": payload.id,
+                        "fuel": payload.fuel,
+                        "amount": payload.amount,
+                        "phone": payload.phone,
+                        "fuelstation": payload.fuelstation,
+                        "status": payload.status,
+                        "mpesa_response": stk_response
+                    },
+                    status=status.HTTP_201_CREATED
+                )
+
+            except Exception as mpesa_error:
+                # If M-Pesa request fails, still return success for storage but with error info
+                return Response(
+                    {
+                        "message": "espPayload saved but payment initiation failed",
+                        "payload_id": payload.id,
+                        "fuel": payload.fuel,
+                        "amount": payload.amount,
+                        "phone": payload.phone,
+                        "fuelstation": payload.fuelstation,
+                        "status": payload.status,
+                        "mpesa_error": str(mpesa_error)
+                    },
+                    status=status.HTTP_201_CREATED
+                )
 
         except json.JSONDecodeError:
             return Response({"error": "Invalid JSON format"}, status=status.HTTP_400_BAD_REQUEST)
@@ -342,3 +385,85 @@ def get_stations(request):
         return Response(stations_list, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class MpesaCallbackHandler(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            
+            # Extract the payment details from callback
+            result_code = data.get('Body', {}).get('stkCallback', {}).get('ResultCode')
+            phone_number = data.get('Body', {}).get('stkCallback', {}).get('CallbackMetadata', {}).get('Item', [])[4].get('Value')
+            
+            # Format phone number to match our stored format
+            if phone_number.startswith('254'):
+                phone_number = '0' + phone_number[3:]
+            
+            # Get the latest pending transaction for this phone number
+            try:
+                payload = espPayload.objects.filter(
+                    phone=phone_number,
+                    status=1  # Payment initiated
+                ).latest('created_at')
+                
+                if result_code == 0:  # Success
+                    payload.status = 2  # Payment successful
+                else:
+                    payload.status = 3  # Payment failed
+                
+                payload.save()
+                
+                return Response({"status": "success"}, status=status.HTTP_200_OK)
+                
+            except espPayload.DoesNotExist:
+                return Response(
+                    {"error": "No pending transaction found"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+                
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+@method_decorator(csrf_exempt, name='dispatch')
+class PaymentStatus(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            phone = request.GET.get('phone')
+            if not phone:
+                return Response(
+                    {"error": "Phone number is required"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            try:
+                payload = espPayload.objects.filter(
+                    phone=phone
+                ).latest('created_at')
+                
+                response = {
+                    "status": payload.status,
+                    "message": "Payment successful" if payload.status == 2 else "Payment failed" if payload.status == 3 else "Payment pending"
+                }
+                
+                return Response(response, status=status.HTTP_200_OK)
+                
+            except espPayload.DoesNotExist:
+                return Response(
+                    {"error": "No transaction found"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+                
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

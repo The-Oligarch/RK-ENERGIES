@@ -1,5 +1,8 @@
 from django.urls import path
-from .views import register, users, edit_user, login, get_stations,espPayloadHandling
+from .views import (
+    register, users, edit_user, login, get_stations,
+    espPayloadHandling, MpesaCallbackHandler, PaymentStatus
+)
 
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -13,4 +16,6 @@ urlpatterns = [
     path('login/', login),
     path('stations/', get_stations, name='get_stations'),
     path('esppayload/', espPayloadHandling.as_view(), name='payload'),
+    path('mpesa-callback/', MpesaCallbackHandler.as_view(), name='mpesa_callback'),
+    path('payment-status/', PaymentStatus.as_view(), name='payment_status'),
 ]
