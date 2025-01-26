@@ -7,8 +7,8 @@
 #include <ArduinoJson.h>
 
 // WiFi credentials
-const char* ssid = "Nyakanga";
-const char* password = "everydayiambuffering";
+const char* ssid = "rey";
+const char* password = "a..b..c..d";
 
 // Define the rows and columns for the keypad
 const byte ROWS = 4;

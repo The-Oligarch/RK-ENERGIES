@@ -1,6 +1,10 @@
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth import login, authenticate
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 import json
 from django.shortcuts import render
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -116,20 +120,25 @@ def edit_user(request, pk):
     except Exception as e:
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
+
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import json
+from .models import espPayload
+
 @method_decorator(csrf_exempt, name='dispatch')
-@method_decorator(permission_classes([AllowAny]), name='dispatch')
 class espPayloadHandling(APIView):
     def post(self, request, *args, **kwargs):
         try:
-            
             if isinstance(request.data, dict) and '_content' not in request.data:
                 data = request.data
                 print("Parsed as JSON:", data)
             else:
-                
                 data = dict(request.data)
                 print("QueryDict Data:", data)
-                
                 
                 data_json = data.get('_content', '')  
                 print(data_json)
@@ -137,14 +146,10 @@ class espPayloadHandling(APIView):
                 data = json.loads(data_json) 
                 print("Extracted Data:", data)
             
-          
-            
             phone = data.get('phone')
             amount = data.get('amount')
             fuel = data.get('fuel')
             fuelstation = data.get('fuelstation')
-
-            
 
             if None in [phone, amount, fuel, fuelstation]:
                 return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
@@ -176,9 +181,7 @@ class espPayloadHandling(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            
             payloads = espPayload.objects.all()
-
             payload_data = [
                 {
                     "payload_id": payload.id,
@@ -195,7 +198,6 @@ class espPayloadHandling(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
 
 
 
