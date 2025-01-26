@@ -128,7 +128,7 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 
-
+@permission_classes([AllowAny])
 @method_decorator(csrf_exempt, name='dispatch')
 class espPayloadHandling(APIView):
     def post(self, request, *args, **kwargs):
