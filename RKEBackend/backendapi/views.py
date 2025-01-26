@@ -116,7 +116,8 @@ def edit_user(request, pk):
     except Exception as e:
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
-@permission_classes([AllowAny])
+@method_decorator(csrf_exempt, name='dispatch')
+@method_decorator(permission_classes([AllowAny]), name='dispatch')
 class espPayloadHandling(APIView):
     def post(self, request, *args, **kwargs):
         try:
