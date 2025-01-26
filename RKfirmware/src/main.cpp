@@ -46,8 +46,9 @@ unsigned long lastScrollTime = 0;
 const int SCROLL_INTERVAL = 2000; // Scroll every 2 seconds
 
 // Backend API URLs
-const char* stationsUrl = "https://rk-energies-u9cj.onrender.com/backendapi/stations/";
-const char* espPayloadUrl = "https://rk-energies-u9cj.onrender.com/backendapi/esppayload/";
+const char* serverName = "https://rk-energies-u9cj.onrender.com";
+const char* stationsUrl = serverName + "/backendapi/stations/";
+const char* espPayloadUrl = serverName + "/backendapi/esppayload/";
 
 // State variables
 enum SystemState {
@@ -74,6 +75,7 @@ void sendPayload();
 void handleInput(char key);
 void connectToWiFi();
 void getFuelStations();
+void checkPaymentStatus(const String& phone);
 
 void connectToWiFi() {
   Serial.println("Connecting to WiFi...");
@@ -169,37 +171,84 @@ void sendPayload() {
   lcd.setCursor(0, 0);
   lcd.print("Processing...");
 
+  sendPayload(fuelStations[currentStationIndex], selectedFuelType, amount.toFloat(), phoneNumber);
+}
+
+void sendPayload(const String& fuelstation, const String& fuel, int amount, const String& phone) {
   HTTPClient http;
   http.begin(espPayloadUrl);
   http.addHeader("Content-Type", "application/json");
   
   // Create JSON payload
   DynamicJsonDocument doc(1024);
-  doc["fuelstation"] = fuelStations[currentStationIndex];
-  doc["fuel"] = selectedFuelType;  // Now sending "petrol" or "diesel"
-  doc["amount"] = amount.toFloat();
-  doc["phone"] = phoneNumber;  // Send phone as string to preserve leading zeros
-  doc["status"] = 0;  // Adding status field with value 0
+  doc["fuelstation"] = fuelstation;
+  doc["fuel"] = fuel;
+  doc["amount"] = amount;
+  doc["phone"] = phone;
+  doc["status"] = 0;
   
-  String jsonString;
-  serializeJson(doc, jsonString);
+  String requestBody;
+  serializeJson(doc, requestBody);
   
-  Serial.println("Sending payload: " + jsonString);
-  int httpCode = http.POST(jsonString);
+  int httpResponseCode = http.POST(requestBody);
   
-  if (httpCode > 0) {
+  if (httpResponseCode > 0) {
     String response = http.getString();
-    Serial.println("API Response: " + response);
-    currentState = STATE_PROCESSING;
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Processing...");
+    lcd.setCursor(0, 1);
+    lcd.print("Check your phone");
+    
+    // Start checking payment status
+    checkPaymentStatus(phone);
   } else {
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Send failed");
+    lcd.print("Error occurred!");
     lcd.setCursor(0, 1);
-    lcd.print("Try again");
-    delay(2000);
-    currentState = STATE_WAITING;
-    displayWaitingMessage();
+    lcd.print("Try again later");
+  }
+  
+  http.end();
+}
+
+void checkPaymentStatus(const String& phone) {
+  String url = String(serverName) + "/backendapi/payment-status/?phone=" + phone;
+  
+  HTTPClient http;
+  http.begin(url);
+  
+  int httpResponseCode = http.GET();
+  
+  if (httpResponseCode > 0) {
+    String response = http.getString();
+    DynamicJsonDocument doc(1024);
+    deserializeJson(doc, response);
+    
+    int status = doc["status"];
+    const char* message = doc["message"];
+    
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    
+    if (status == 2) {  // Payment successful
+      lcd.print("Payment Success!");
+      lcd.setCursor(0, 1);
+      lcd.print("Thank you!");
+    } else if (status == 3) {  // Payment failed
+      lcd.print("Payment Failed!");
+      lcd.setCursor(0, 1);
+      lcd.print("Try again later");
+    } else {  // Payment pending
+      lcd.print("Payment Pending");
+      lcd.setCursor(0, 1);
+      lcd.print("Please wait...");
+      
+      // Wait for 5 seconds and check again
+      delay(5000);
+      checkPaymentStatus(phone);
+    }
   }
   
   http.end();
