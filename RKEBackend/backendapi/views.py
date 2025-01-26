@@ -129,7 +129,6 @@ from rest_framework import status
 import json
 
 @permission_classes([AllowAny])
-@method_decorator(csrf_exempt, name='dispatch')
 class espPayloadHandling(APIView):
     def post(self, request, *args, **kwargs):
         try:
@@ -198,8 +197,6 @@ class espPayloadHandling(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 
 
 @api_view(['GET', 'POST'])
