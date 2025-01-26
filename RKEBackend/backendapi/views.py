@@ -127,7 +127,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import json
-from .models import espPayload
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class espPayloadHandling(APIView):
