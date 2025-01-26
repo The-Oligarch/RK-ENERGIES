@@ -177,27 +177,17 @@ import json
 @method_decorator(csrf_exempt, name='dispatch')
 class espPayloadHandling(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request, *args, **kwargs):
         try:
-            if isinstance(request.data, dict) and '_content' not in request.data:
-                data = request.data
-                print("Parsed as JSON:", data)
-            else:
-                data = dict(request.data)
-                print("QueryDict Data:", data)
-                
-                data_json = data.get('_content', '')  
-                print(data_json)
-                data_json = data_json[0].replace("\r\n", "")  
-                data = json.loads(data_json) 
-                print("Extracted Data:", data)
-            
+            data = json.loads(request.body)
+            print("Parsed as JSON:", data)
+
             phone = data.get('phone')
             amount = data.get('amount')
             fuel = data.get('fuel')
             fuelstation = data.get('fuelstation')
-            status = data.get('status', 0)  # Default to 0 if not provided
+            status_value = data.get('status', 0)  
 
             if None in [phone, amount, fuel, fuelstation]:
                 return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
@@ -207,7 +197,7 @@ class espPayloadHandling(APIView):
                 amount=amount,
                 fuel=fuel,
                 fuelstation=fuelstation,
-                status=status
+                status=status_value  
             )
 
             return Response(
@@ -220,7 +210,7 @@ class espPayloadHandling(APIView):
                     "fuelstation": payload.fuelstation,
                     "status": payload.status
                 },
-                status=status.HTTP_201_CREATED,
+                status=status.HTTP_201_CREATED
             )
 
         except json.JSONDecodeError:
