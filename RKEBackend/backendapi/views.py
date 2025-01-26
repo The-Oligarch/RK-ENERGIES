@@ -44,6 +44,57 @@ from django.contrib.auth.hashers import make_password
 from backend.models import CustomUser
 from django.shortcuts import get_object_or_404
 load_dotenv()
+import requests
+from requests.auth import HTTPBasicAuth
+import json
+from datetime import datetime
+import base64
+
+# Step 1: Get the required credentials
+consumer_key = 'YOUR_CONSUMER_KEY'
+consumer_secret = 'YOUR_CONSUMER_SECRET'
+shortcode = 'YOUR_SHORTCODE'
+lipa_na_mpesa_online_passkey = 'YOUR_PASSKEY'
+phone_number = 'PHONE_NUMBER_TO_CHARGE'
+amount = 'AMOUNT_TO_CHARGE'
+callback_url = 'http://127.0.0.1:8000/callback/'
+
+# Step 2: Generate the access token
+def generate_access_token(consumer_key, consumer_secret):
+    api_url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+    response = requests.get(api_url, auth=HTTPBasicAuth(consumer_key, consumer_secret))
+    access_token = response.json()['access_token']
+    return access_token
+
+# Step 3: Make the STK push request
+def stk_push_request(access_token, shortcode, lipa_na_mpesa_online_passkey, phone_number, amount, callback_url):
+    api_url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
+    headers = {'Authorization': 'Bearer {}'.format(access_token)}
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    password = base64.b64encode((shortcode + lipa_na_mpesa_online_passkey + timestamp).encode('utf-8')).decode('utf-8')
+    
+    payload = {
+        "BusinessShortCode": shortcode,
+        "Password": password,
+        "Timestamp": timestamp,
+        "TransactionType": "CustomerPayBillOnline",
+        "Amount": amount,
+        "PartyA": phone_number,
+        "PartyB": shortcode,
+        "PhoneNumber": phone_number,
+        "CallBackURL": callback_url,
+        "AccountReference": "YourAccountReference",
+        "TransactionDesc": "Payment for goods"
+    }
+    
+    response = requests.post(api_url, json=payload, headers=headers)
+    return response.json()
+
+if __name__ == '__main__':
+    access_token = generate_access_token(consumer_key, consumer_secret)
+    response = stk_push_request(access_token, shortcode, lipa_na_mpesa_online_passkey, phone_number, amount, callback_url)
+    print(json.dumps(response, indent=4))
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
