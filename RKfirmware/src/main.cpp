@@ -35,8 +35,12 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 // Global variables
 const int MAX_STATIONS = 4;
 String fuelStations[MAX_STATIONS];
-int stationCount = 0;
+int numStations = 0;
 int currentStationIndex = 0;
+String inputBuffer = "";
+String phoneNumber = "";
+String amount = "";
+String selectedFuelType = "petrol";  // Default to petrol
 
 // Fuel type options
 const char* FUEL_TYPES[] = {"1) Petrol", "2) Diesel"};  // Petrol first
@@ -47,8 +51,13 @@ const int SCROLL_INTERVAL = 2000; // Scroll every 2 seconds
 
 // Backend API URLs
 const char* serverName = "https://rk-energies-u9cj.onrender.com";
-const char* stationsUrl = serverName + "/backendapi/stations/";
-const char* espPayloadUrl = serverName + "/backendapi/esppayload/";
+const char* stationsEndpoint = "/backendapi/stations/";
+const char* espPayloadEndpoint = "/backendapi/esppayload/";
+const char* paymentStatusEndpoint = "/backendapi/payment-status/";
+
+String getFullUrl(const char* endpoint) {
+  return String(serverName) + endpoint;
+}
 
 // State variables
 enum SystemState {
@@ -61,21 +70,19 @@ enum SystemState {
 };
 
 SystemState currentState = STATE_WAITING;
-String selectedFuelType = "";
-String amount = "";
-String phoneNumber = "";
-String inputBuffer = "";
 
 // Function declarations
 void displayWaitingMessage();
 void displayFuelTypes();
 void displayStationSelect();
 void displayConfirmationMessage();
-void sendPayload();
+void processPayment();
+void sendPayload(const String& fuelstation, const String& fuel, float amount, const String& phone);
 void handleInput(char key);
 void connectToWiFi();
 void getFuelStations();
 void checkPaymentStatus(const String& phone);
+void displayCurrentStation();
 
 void connectToWiFi() {
   Serial.println("Connecting to WiFi...");
@@ -127,28 +134,32 @@ void getFuelStations() {
   if (WiFi.status() != WL_CONNECTED) return;
 
   HTTPClient http;
-  http.begin(stationsUrl);
+  String url = getFullUrl(stationsEndpoint);
+  http.begin(url);
   
   int httpCode = http.GET();
   
   if (httpCode > 0) {
     String payload = http.getString();
-    DynamicJsonDocument doc(1024);
+    JsonDocument doc;
     DeserializationError error = deserializeJson(doc, payload);
     
     if (!error) {
-      JsonArray stations = doc.as<JsonArray>();
-      stationCount = 0;
-      
-      for(JsonVariant station : stations) {
-        if (stationCount < MAX_STATIONS) {
-          fuelStations[stationCount] = station.as<String>();
-          stationCount++;
+      JsonArray array = doc.as<JsonArray>();
+      numStations = 0;
+      for(JsonVariant v : array) {
+        if (numStations < MAX_STATIONS) {
+          fuelStations[numStations++] = v.as<String>();
         }
       }
       
-      if (stationCount > 0) {
+      if (numStations > 0) {
         Serial.println("Stations loaded successfully");
+        currentStationIndex = 0;
+        displayCurrentStation();
+      } else {
+        lcd.clear();
+        lcd.print("No stations found");
       }
     }
   }
@@ -156,7 +167,7 @@ void getFuelStations() {
   http.end();
 }
 
-void sendPayload() {
+void processPayment() {
   if (WiFi.status() != WL_CONNECTED) {
     lcd.clear();
     lcd.setCursor(0, 0);
@@ -166,7 +177,6 @@ void sendPayload() {
     return;
   }
 
-  // Show processing message
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Processing...");
@@ -174,13 +184,14 @@ void sendPayload() {
   sendPayload(fuelStations[currentStationIndex], selectedFuelType, amount.toFloat(), phoneNumber);
 }
 
-void sendPayload(const String& fuelstation, const String& fuel, int amount, const String& phone) {
+void sendPayload(const String& fuelstation, const String& fuel, float amount, const String& phone) {
   HTTPClient http;
-  http.begin(espPayloadUrl);
+  String url = getFullUrl(espPayloadEndpoint);
+  http.begin(url);
   http.addHeader("Content-Type", "application/json");
   
   // Create JSON payload
-  DynamicJsonDocument doc(1024);
+  JsonDocument doc;
   doc["fuelstation"] = fuelstation;
   doc["fuel"] = fuel;
   doc["amount"] = amount;
@@ -214,7 +225,7 @@ void sendPayload(const String& fuelstation, const String& fuel, int amount, cons
 }
 
 void checkPaymentStatus(const String& phone) {
-  String url = String(serverName) + "/backendapi/payment-status/?phone=" + phone;
+  String url = getFullUrl(paymentStatusEndpoint) + "?phone=" + phone;
   
   HTTPClient http;
   http.begin(url);
@@ -223,31 +234,33 @@ void checkPaymentStatus(const String& phone) {
   
   if (httpResponseCode > 0) {
     String response = http.getString();
-    DynamicJsonDocument doc(1024);
-    deserializeJson(doc, response);
+    JsonDocument doc;
+    DeserializationError error = deserializeJson(doc, response);
     
-    int status = doc["status"];
-    const char* message = doc["message"];
-    
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    
-    if (status == 2) {  // Payment successful
-      lcd.print("Payment Success!");
-      lcd.setCursor(0, 1);
-      lcd.print("Thank you!");
-    } else if (status == 3) {  // Payment failed
-      lcd.print("Payment Failed!");
-      lcd.setCursor(0, 1);
-      lcd.print("Try again later");
-    } else {  // Payment pending
-      lcd.print("Payment Pending");
-      lcd.setCursor(0, 1);
-      lcd.print("Please wait...");
+    if (!error) {
+      int status = doc["status"];
+      const char* message = doc["message"];
       
-      // Wait for 5 seconds and check again
-      delay(5000);
-      checkPaymentStatus(phone);
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      
+      if (status == 2) {  // Payment successful
+        lcd.print("Payment Success!");
+        lcd.setCursor(0, 1);
+        lcd.print("Thank you!");
+      } else if (status == 3) {  // Payment failed
+        lcd.print("Payment Failed!");
+        lcd.setCursor(0, 1);
+        lcd.print("Try again later");
+      } else {  // Payment pending
+        lcd.print("Payment Pending");
+        lcd.setCursor(0, 1);
+        lcd.print("Please wait...");
+        
+        // Wait for 5 seconds and check again
+        delay(5000);
+        checkPaymentStatus(phone);
+      }
     }
   }
   
@@ -293,14 +306,22 @@ void displayStationSelect() {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Select station 1-");
-  lcd.print(stationCount);
+  lcd.print(numStations);
   lcd.setCursor(0, 1);
-  if (stationCount > 0) {
+  if (numStations > 0) {
     lcd.print(String(currentStationIndex + 1) + ") ");
     lcd.print(fuelStations[currentStationIndex]);
   } else {
     lcd.print("No stations");
   }
+}
+
+void displayCurrentStation() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Station:");
+  lcd.setCursor(0, 1);
+  lcd.print(fuelStations[currentStationIndex]);
 }
 
 void handleInput(char key) {
@@ -325,7 +346,7 @@ void handleInput(char key) {
         displayWaitingMessage();
       } else if (key >= '1' && key <= '9') {
         int selected = key - '1';  // Convert char to int (0-based index)
-        if (selected < stationCount) {
+        if (selected < numStations) {
           currentStationIndex = selected;
           lcd.clear();
           lcd.setCursor(0, 0);
@@ -336,8 +357,8 @@ void handleInput(char key) {
           currentState = STATE_WAITING;
           displayWaitingMessage();
         }
-      } else if (key == '#' && stationCount > 0) {
-        currentStationIndex = (currentStationIndex + 1) % stationCount;
+      } else if (key == '#' && numStations > 0) {
+        currentStationIndex = (currentStationIndex + 1) % numStations;
         displayStationSelect();
       }
       break;
@@ -397,7 +418,7 @@ void handleInput(char key) {
       } else if (key == '#' && inputBuffer.length() == 10) {
         phoneNumber = inputBuffer;
         inputBuffer = "";
-        sendPayload();
+        processPayment();
       } else if (key == '*') {
         currentState = STATE_FUEL_TYPE;
         currentFuelTypeIndex = 0;  // Reset to Petrol
@@ -446,9 +467,9 @@ void loop() {
   
   // Auto-scroll stations in station select mode
   static unsigned long lastStationScrollTime = 0;
-  if (currentState == STATE_STATION_SELECT && stationCount > 0 && 
+  if (currentState == STATE_STATION_SELECT && numStations > 0 && 
       millis() - lastStationScrollTime >= SCROLL_INTERVAL) {
-    currentStationIndex = (currentStationIndex + 1) % stationCount;
+    currentStationIndex = (currentStationIndex + 1) % numStations;
     displayStationSelect();
     lastStationScrollTime = millis();
   }
