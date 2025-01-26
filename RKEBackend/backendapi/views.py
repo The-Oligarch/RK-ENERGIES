@@ -129,25 +129,7 @@ class espPayloadHandling(APIView):
         # Handle GET request here
         return JsonResponse({"message": "Success"})
 
-    def get(self, request, *args, **kwargs):
-        try:
-            payloads = espPayload.objects.all()
-            payload_data = [
-                {
-                    "payload_id": payload.id,
-                    "fuel": payload.fuel,
-                    "amount": payload.amount,
-                    "phone": payload.phone,
-                    "fuelstation": payload.fuelstation,
-                    "created_at": payload.created_at.isoformat() if hasattr(payload, 'created_at') else None,
-                }
-                for payload in payloads
-            ]
-
-            return Response(payload_data, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
 
 @api_view(['GET', 'POST'])
