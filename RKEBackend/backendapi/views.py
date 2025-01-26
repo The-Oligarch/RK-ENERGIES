@@ -1,4 +1,3 @@
-
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth import login, authenticate
 
@@ -290,3 +289,15 @@ def login(request):
     except Exception as e:
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_stations(request):
+    try:
+        # Get unique stations from CustomUser model
+        stations = CustomUser.objects.values_list('station', flat=True).distinct()
+        # Convert to list and remove any None values
+        stations_list = list(filter(None, stations))
+        return Response(stations_list, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
