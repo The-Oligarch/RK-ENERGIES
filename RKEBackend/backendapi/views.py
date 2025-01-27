@@ -610,3 +610,76 @@ class TransactionList(APIView):
         }
         
         return Response(data)
+
+from django.db.models.functions import TruncDate, ExtractHour
+from django.db.models import Count, Sum, Avg
+
+@method_decorator(csrf_exempt, name='dispatch')
+class DashboardData(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        try:
+            # Get all successful transactions
+            transactions = espPayload.objects.filter(status=2)
+            
+            # Today's metrics
+            today = timezone.now().date()
+            today_transactions = transactions.filter(created_at__date=today)
+            
+            today_stats = {
+                'total_sales': sum(float(t.amount) for t in today_transactions),
+                'transaction_count': today_transactions.count(),
+                'average_transaction': sum(float(t.amount) for t in today_transactions) / today_transactions.count() if today_transactions.count() > 0 else 0
+            }
+            
+            # Last 7 days trend
+            last_7_days = timezone.now() - timedelta(days=7)
+            daily_trend = transactions.filter(
+                created_at__gte=last_7_days
+            ).annotate(
+                date=TruncDate('created_at')
+            ).values('date').annotate(
+                total=Count('id'),
+                amount=Sum('amount')
+            ).order_by('date')
+            
+            # Fuel type distribution
+            fuel_distribution = transactions.values('fuel').annotate(
+                count=Count('id'),
+                total_amount=Sum('amount')
+            ).order_by('-count')
+            
+            # Peak hours analysis
+            peak_hours = transactions.annotate(
+                hour=ExtractHour('created_at')
+            ).values('hour').annotate(
+                count=Count('id')
+            ).order_by('-count')
+            
+            # Station performance
+            station_performance = transactions.values('fuelstation').annotate(
+                total_sales=Sum('amount'),
+                transaction_count=Count('id'),
+                average_transaction=Avg('amount')
+            ).order_by('-total_sales')
+            
+            # Recent transactions
+            recent_transactions = transactions.order_by('-created_at')[:5].values(
+                'created_at', 'phone', 'amount', 'fuel', 'fuelstation', 'mpesa_receipt'
+            )
+            
+            return Response({
+                'today_stats': today_stats,
+                'daily_trend': list(daily_trend),
+                'fuel_distribution': list(fuel_distribution),
+                'peak_hours': list(peak_hours),
+                'station_performance': list(station_performance),
+                'recent_transactions': list(recent_transactions)
+            })
+            
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
