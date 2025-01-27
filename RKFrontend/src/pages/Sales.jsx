@@ -20,12 +20,13 @@ import {
   InputAdornment,
   Tooltip
 } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import dayjs from 'dayjs';
 
 const Sales = () => {
   const [transactions, setTransactions] = useState([]);
@@ -46,8 +47,8 @@ const Sales = () => {
       let url = 'https://rk-energies-u9cj.onrender.com/backendapi/transactions/?status=2';
       
       if (search) url += `&search=${encodeURIComponent(search)}`;
-      if (startDate) url += `&start_date=${startDate.toISOString().split('T')[0]}`;
-      if (endDate) url += `&end_date=${endDate.toISOString().split('T')[0]}`;
+      if (startDate) url += `&start_date=${startDate.format('YYYY-MM-DD')}`;
+      if (endDate) url += `&end_date=${endDate.format('YYYY-MM-DD')}`;
       
       const response = await axios.get(url);
       setTransactions(response.data.transactions);
@@ -68,7 +69,7 @@ const Sales = () => {
   const exportToCSV = () => {
     const headers = ['Date', 'Phone', 'Amount', 'Fuel Type', 'Fuel Station', 'M-Pesa Receipt'];
     const csvData = transactions.map(t => [
-      new Date(t.created_at).toLocaleString(),
+      dayjs(t.created_at).format('YYYY-MM-DD HH:mm:ss'),
       t.phone,
       t.amount,
       t.fuel,
@@ -85,7 +86,7 @@ const Sales = () => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `sales_${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `sales_${dayjs().format('YYYY-MM-DD')}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -174,22 +175,22 @@ const Sales = () => {
                 />
               </Grid>
               <Grid item xs={12} md={3}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Start Date"
                     value={startDate}
-                    onChange={setStartDate}
-                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    onChange={(newValue) => setStartDate(newValue)}
+                    slotProps={{ textField: { fullWidth: true } }}
                   />
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={12} md={3}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="End Date"
                     value={endDate}
-                    onChange={setEndDate}
-                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    onChange={(newValue) => setEndDate(newValue)}
+                    slotProps={{ textField: { fullWidth: true } }}
                   />
                 </LocalizationProvider>
               </Grid>
@@ -229,7 +230,7 @@ const Sales = () => {
                 {transactions.map((transaction) => (
                   <TableRow key={transaction.id}>
                     <TableCell>
-                      {new Date(transaction.created_at).toLocaleString()}
+                      {dayjs(transaction.created_at).format('YYYY-MM-DD HH:mm:ss')}
                     </TableCell>
                     <TableCell>{transaction.phone}</TableCell>
                     <TableCell>KES {parseFloat(transaction.amount).toLocaleString()}</TableCell>
