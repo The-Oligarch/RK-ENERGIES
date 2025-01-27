@@ -57,27 +57,30 @@ from rest_framework import status
 import json
 
 # Step 1: Get the required credentials
-consumer_key = 'YOUR_CONSUMER_KEY'
-consumer_secret = 'YOUR_CONSUMER_SECRET'
-shortcode = 'YOUR_SHORTCODE'
-lipa_na_mpesa_online_passkey = 'YOUR_PASSKEY'
-phone_number = 'PHONE_NUMBER_TO_CHARGE'
-amount = 'AMOUNT_TO_CHARGE'
-callback_url = 'http://127.0.0.1:8000/callback/'
+consumer_key = os.getenv('MPESA_CONSUMER_KEY', 'FSS5KGCemj2ToKq6l091N9SgQQJm9dqZ62wSdKU1kVmCiXuj')
+consumer_secret = os.getenv('MPESA_CONSUMER_SECRET', 'Zr1mGxk76jgHLh9RxfUWcHldfCjlfQn04G9niB3VxogWtcuipkmX5Umj9VEEXc6D')
+shortcode = os.getenv('MPESA_SHORTCODE', '174379')
+lipa_na_mpesa_online_passkey = os.getenv('MPESA_PASSKEY', 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919')
+callback_url = os.getenv('MPESA_CALLBACK_URL', 'https://rk-energies-u9cj.onrender.com/backendapi/mpesa-callback/')
 
 # Step 2: Generate the access token
 def generate_access_token(consumer_key, consumer_secret):
-    api_url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
-    response = requests.get(api_url, auth=HTTPBasicAuth(consumer_key, consumer_secret))
-    access_token = response.json()['access_token']
+    api_url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+    r = requests.get(api_url, auth=HTTPBasicAuth(consumer_key, consumer_secret))
+    json_response = r.json()
+    access_token = json_response['access_token']
     return access_token
 
 # Step 3: Make the STK push request
 def stk_push_request(access_token, shortcode, lipa_na_mpesa_online_passkey, phone_number, amount, callback_url):
-    api_url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
-    headers = {'Authorization': 'Bearer {}'.format(access_token)}
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-    password = base64.b64encode((shortcode + lipa_na_mpesa_online_passkey + timestamp).encode('utf-8')).decode('utf-8')
+    password = base64.b64encode((shortcode + lipa_na_mpesa_online_passkey + timestamp).encode()).decode('utf-8')
+    
+    api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+    }
     
     payload = {
         "BusinessShortCode": shortcode,
@@ -89,8 +92,8 @@ def stk_push_request(access_token, shortcode, lipa_na_mpesa_online_passkey, phon
         "PartyB": shortcode,
         "PhoneNumber": phone_number,
         "CallBackURL": callback_url,
-        "AccountReference": "YourAccountReference",
-        "TransactionDesc": "Payment for goods"
+        "AccountReference": "RK ENERGIES",
+        "TransactionDesc": "Fuel Payment" 
     }
     
     response = requests.post(api_url, json=payload, headers=headers)
@@ -98,7 +101,7 @@ def stk_push_request(access_token, shortcode, lipa_na_mpesa_online_passkey, phon
 
 if __name__ == '__main__':
     access_token = generate_access_token(consumer_key, consumer_secret)
-    response = stk_push_request(access_token, shortcode, lipa_na_mpesa_online_passkey, phone_number, amount, callback_url)
+    response = stk_push_request(access_token, shortcode, lipa_na_mpesa_online_passkey, '254722111111', '1', callback_url)
     print(json.dumps(response, indent=4))
 
 
