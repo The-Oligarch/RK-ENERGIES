@@ -613,6 +613,7 @@ class TransactionList(APIView):
 
 from django.db.models.functions import TruncDate, ExtractHour
 from django.db.models import Count, Sum, Avg
+from django.db.models import Case, When, Cast, FloatField
 
 @method_decorator(csrf_exempt, name='dispatch')
 class DashboardData(APIView):
@@ -627,10 +628,24 @@ class DashboardData(APIView):
             today = timezone.now().date()
             today_transactions = transactions.filter(created_at__date=today)
             
+            # Safely calculate total sales
+            try:
+                total_sales = sum(float(t.amount) for t in today_transactions if t.amount and t.amount.replace('.', '').isdigit())
+            except (ValueError, AttributeError):
+                total_sales = 0
+                
+            transaction_count = today_transactions.count()
+            
+            # Safely calculate average
+            try:
+                average_transaction = total_sales / transaction_count if transaction_count > 0 else 0
+            except (ValueError, ZeroDivisionError):
+                average_transaction = 0
+            
             today_stats = {
-                'total_sales': sum(float(t.amount) for t in today_transactions),
-                'transaction_count': today_transactions.count(),
-                'average_transaction': sum(float(t.amount) for t in today_transactions) / today_transactions.count() if today_transactions.count() > 0 else 0
+                'total_sales': total_sales,
+                'transaction_count': transaction_count,
+                'average_transaction': average_transaction
             }
             
             # Last 7 days trend
@@ -640,14 +655,27 @@ class DashboardData(APIView):
             ).annotate(
                 date=TruncDate('created_at')
             ).values('date').annotate(
-                total=Count('id'),
-                amount=Sum('amount')
+                total=Count('id')
+            ).annotate(
+                amount=Sum(
+                    Case(
+                        When(amount__regex=r'^\d*\.?\d+$', then=Cast('amount', FloatField())),
+                        default=0,
+                        output_field=FloatField(),
+                    )
+                )
             ).order_by('date')
             
             # Fuel type distribution
             fuel_distribution = transactions.values('fuel').annotate(
                 count=Count('id'),
-                total_amount=Sum('amount')
+                total_amount=Sum(
+                    Case(
+                        When(amount__regex=r'^\d*\.?\d+$', then=Cast('amount', FloatField())),
+                        default=0,
+                        output_field=FloatField(),
+                    )
+                )
             ).order_by('-count')
             
             # Peak hours analysis
@@ -659,9 +687,21 @@ class DashboardData(APIView):
             
             # Station performance
             station_performance = transactions.values('fuelstation').annotate(
-                total_sales=Sum('amount'),
-                transaction_count=Count('id'),
-                average_transaction=Avg('amount')
+                total_sales=Sum(
+                    Case(
+                        When(amount__regex=r'^\d*\.?\d+$', then=Cast('amount', FloatField())),
+                        default=0,
+                        output_field=FloatField(),
+                    )
+                ),
+                transaction_count=Count('id')
+            ).annotate(
+                average_transaction=Case(
+                    When(transaction_count__gt=0, 
+                          then=models.F('total_sales') / models.F('transaction_count')),
+                    default=0,
+                    output_field=FloatField(),
+                )
             ).order_by('-total_sales')
             
             # Recent transactions
@@ -679,6 +719,7 @@ class DashboardData(APIView):
             })
             
         except Exception as e:
+            print(f"Dashboard Error: {str(e)}")  # Add logging for debugging
             return Response(
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
