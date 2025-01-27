@@ -396,15 +396,50 @@ class MpesaCallbackHandler(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
+            # Log the raw request body for debugging
+            print("M-Pesa Callback Raw Data:", request.body.decode('utf-8'))
+            
             data = json.loads(request.body)
+            print("M-Pesa Callback Parsed Data:", json.dumps(data, indent=2))
             
             # Extract the payment details from callback
-            result_code = data.get('Body', {}).get('stkCallback', {}).get('ResultCode')
-            phone_number = data.get('Body', {}).get('stkCallback', {}).get('CallbackMetadata', {}).get('Item', [])[4].get('Value')
+            body = data.get('Body', {})
+            stkCallback = body.get('stkCallback', {})
+            result_code = stkCallback.get('ResultCode')
+            
+            # Get merchant request ID for tracking
+            merchant_request_id = stkCallback.get('MerchantRequestID')
+            checkout_request_id = stkCallback.get('CheckoutRequestID')
+            
+            # Get callback metadata
+            callback_metadata = stkCallback.get('CallbackMetadata', {})
+            items = callback_metadata.get('Item', [])
+            
+            # Initialize variables
+            amount = None
+            mpesa_receipt_number = None
+            transaction_date = None
+            phone_number = None
+            
+            # Extract values from metadata items
+            for item in items:
+                name = item.get('Name')
+                value = item.get('Value')
+                
+                if name == 'Amount':
+                    amount = value
+                elif name == 'MpesaReceiptNumber':
+                    mpesa_receipt_number = value
+                elif name == 'TransactionDate':
+                    transaction_date = value
+                elif name == 'PhoneNumber':
+                    phone_number = str(value)
             
             # Format phone number to match our stored format
-            if phone_number.startswith('254'):
+            if phone_number and phone_number.startswith('254'):
                 phone_number = '0' + phone_number[3:]
+            
+            print(f"Processing payment for phone: {phone_number}, amount: {amount}, receipt: {mpesa_receipt_number}")
             
             # Get the latest pending transaction for this phone number
             try:
@@ -415,22 +450,47 @@ class MpesaCallbackHandler(APIView):
                 
                 if result_code == 0:  # Success
                     payload.status = 2  # Payment successful
+                    print(f"Payment successful for {phone_number}")
                 else:
                     payload.status = 3  # Payment failed
+                    print(f"Payment failed for {phone_number}")
                 
+                # Save additional M-Pesa details
+                payload.mpesa_receipt = mpesa_receipt_number
+                payload.transaction_date = transaction_date
                 payload.save()
                 
-                return Response({"status": "success"}, status=status.HTTP_200_OK)
+                return Response({
+                    "ResultCode": 0,
+                    "ResultDesc": "Callback processed successfully"
+                }, status=status.HTTP_200_OK)
                 
             except espPayload.DoesNotExist:
+                print(f"No pending transaction found for {phone_number}")
                 return Response(
-                    {"error": "No pending transaction found"},
+                    {
+                        "ResultCode": 1,
+                        "ResultDesc": "No pending transaction found"
+                    },
                     status=status.HTTP_404_NOT_FOUND
                 )
                 
-        except Exception as e:
+        except json.JSONDecodeError as e:
+            print(f"JSON Decode Error: {str(e)}")
             return Response(
-                {"error": str(e)},
+                {
+                    "ResultCode": 1,
+                    "ResultDesc": "Invalid JSON format"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            print(f"Error processing callback: {str(e)}")
+            return Response(
+                {
+                    "ResultCode": 1,
+                    "ResultDesc": str(e)
+                },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
