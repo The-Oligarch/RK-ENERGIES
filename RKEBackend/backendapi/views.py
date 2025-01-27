@@ -530,3 +530,33 @@ class PaymentStatus(APIView):
                 {"error": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+@method_decorator(csrf_exempt, name='dispatch')
+class TransactionList(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        status = request.query_params.get('status')
+        
+        # Filter transactions
+        transactions = espPayload.objects.all()
+        if status is not None:
+            transactions = transactions.filter(status=status)
+            
+        # Order by most recent first
+        transactions = transactions.order_by('-created_at')
+        
+        # Serialize the data
+        data = [{
+            'id': t.id,
+            'phone': t.phone,
+            'amount': t.amount,
+            'fuel': t.fuel,
+            'fuelstation': t.fuelstation,
+            'status': t.status,
+            'created_at': t.created_at,
+            'mpesa_receipt': t.mpesa_receipt,
+            'transaction_date': t.transaction_date
+        } for t in transactions]
+        
+        return Response(data)

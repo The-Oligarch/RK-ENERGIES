@@ -1,54 +1,102 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  Box,
+  CircularProgress
+} from '@mui/material';
 
 const Sales = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/backendapi/transactions/?status=2');
+        setTransactions(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch transactions');
+        setLoading(false);
+      }
+    };
+
+    fetchTransactions();
+    // Refresh data every 30 seconds
+    const interval = setInterval(fetchTransactions, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (loading) {
     return (
-        <div className="container-xl p-5">
-            <div className="card card-raised">
-                <div className="card-header bg-primary text-white px-4">
-                    <div className="d-flex justify-content-between align-items-center">
-                        <div className="me-4">
-                            <h2 className="card-title text-white mb-0">Sales</h2>
-                            <div className="card-subtitle">Details and history</div>
-                        </div>
-                        <div className="d-flex gap-2">
-                            <button className="btn btn-lg btn-text-white btn-icon" type="button"><i className="material-icons">download</i></button>
-                            <button className="btn btn-lg btn-text-white btn-icon" type="button"><i className="material-icons">print</i></button>
-                        </div>
-                    </div>
-                </div>
-                <div className="card-body p-4">
-                    <table id="datatablesSimple">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Ext.</th>
-                                <th>City</th>
-                                <th data-type="date" data-format="YYYY/MM/DD">Start Date</th>
-                                <th>Completion</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Unity Pugh</td>
-                                <td>9958</td>
-                                <td>Curicó</td>
-                                <td>2005/02/11</td>
-                                <td>37%</td>
-                            </tr>
-                            <tr>
-                                <td>Theodore Duran</td>
-                                <td>8971</td>
-                                <td>Dhanbad</td>
-                                <td>1999/04/07</td>
-                                <td>97%</td>
-                            </tr>
-                            {/* Add the rest of the rows similarly */}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <CircularProgress />
+      </Box>
     );
+  }
+
+  if (error) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <Typography color="error">{error}</Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box p={3}>
+      <Typography variant="h4" gutterBottom>
+        Sales Transactions
+      </Typography>
+      
+      <TableContainer component={Paper} elevation={3}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><strong>Date</strong></TableCell>
+              <TableCell><strong>Phone</strong></TableCell>
+              <TableCell><strong>Amount</strong></TableCell>
+              <TableCell><strong>Fuel Type</strong></TableCell>
+              <TableCell><strong>Fuel Station</strong></TableCell>
+              <TableCell><strong>M-Pesa Receipt</strong></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {transactions.map((transaction) => (
+              <TableRow key={transaction.id}>
+                <TableCell>
+                  {new Date(transaction.created_at).toLocaleString()}
+                </TableCell>
+                <TableCell>{transaction.phone}</TableCell>
+                <TableCell>KES {transaction.amount}</TableCell>
+                <TableCell>{transaction.fuel}</TableCell>
+                <TableCell>{transaction.fuelstation}</TableCell>
+                <TableCell>{transaction.mpesa_receipt || 'N/A'}</TableCell>
+              </TableRow>
+            ))}
+            {transactions.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  <Typography variant="body1" color="textSecondary">
+                    No successful transactions found
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
 };
 
 export default Sales;
