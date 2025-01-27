@@ -494,6 +494,10 @@ class MpesaCallbackHandler(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+from django.db.models import Q, Sum
+from datetime import datetime, timedelta
+from django.utils import timezone
+
 @method_decorator(csrf_exempt, name='dispatch')
 class PaymentStatus(APIView):
     permission_classes = [AllowAny]
@@ -536,27 +540,73 @@ class TransactionList(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
+        # Get filter parameters
         status = request.query_params.get('status')
+        search = request.query_params.get('search', '').strip()
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
         
-        # Filter transactions
+        # Base queryset
         transactions = espPayload.objects.all()
+        
+        # Apply filters
         if status is not None:
             transactions = transactions.filter(status=status)
             
+        if search:
+            transactions = transactions.filter(
+                Q(phone__icontains=search) |
+                Q(fuelstation__icontains=search) |
+                Q(mpesa_receipt__icontains=search)
+            )
+            
+        if start_date:
+            try:
+                start_date = datetime.strptime(start_date, '%Y-%m-%d').replace(tzinfo=timezone.utc)
+                transactions = transactions.filter(created_at__gte=start_date)
+            except ValueError:
+                pass
+                
+        if end_date:
+            try:
+                end_date = datetime.strptime(end_date, '%Y-%m-%d').replace(hour=23, minute=59, second=59, tzinfo=timezone.utc)
+                transactions = transactions.filter(created_at__lte=end_date)
+            except ValueError:
+                pass
+        
         # Order by most recent first
         transactions = transactions.order_by('-created_at')
         
+        # Calculate totals
+        total_amount = sum(float(t.amount) for t in transactions)
+        total_transactions = transactions.count()
+        
+        # Group by fuel type
+        fuel_totals = {}
+        for t in transactions:
+            if t.fuel not in fuel_totals:
+                fuel_totals[t.fuel] = {'count': 0, 'amount': 0}
+            fuel_totals[t.fuel]['count'] += 1
+            fuel_totals[t.fuel]['amount'] += float(t.amount)
+        
         # Serialize the data
-        data = [{
-            'id': t.id,
-            'phone': t.phone,
-            'amount': t.amount,
-            'fuel': t.fuel,
-            'fuelstation': t.fuelstation,
-            'status': t.status,
-            'created_at': t.created_at,
-            'mpesa_receipt': t.mpesa_receipt,
-            'transaction_date': t.transaction_date
-        } for t in transactions]
+        data = {
+            'transactions': [{
+                'id': t.id,
+                'phone': t.phone,
+                'amount': t.amount,
+                'fuel': t.fuel,
+                'fuelstation': t.fuelstation,
+                'status': t.status,
+                'created_at': t.created_at,
+                'mpesa_receipt': t.mpesa_receipt,
+                'transaction_date': t.transaction_date
+            } for t in transactions],
+            'summary': {
+                'total_amount': total_amount,
+                'total_transactions': total_transactions,
+                'fuel_totals': fuel_totals
+            }
+        }
         
         return Response(data)
